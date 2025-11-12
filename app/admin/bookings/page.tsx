@@ -142,6 +142,29 @@ export default function AdminBookingsPage() {
     totalRevenue: bookings.filter(b => b.payment_status === 'paid').reduce((sum, b) => sum + Number(b.total_amount), 0),
   };
 
+  // Calculate dish summary
+  const dishSummary: Map<string, { count: number; type: string }> = new Map();
+  bookings.forEach(booking => {
+    booking.guests.forEach(guest => {
+      guest.orders.forEach(order => {
+        const dishName = order.menu_item.name;
+        const dishType = order.menu_item.type;
+        if (dishSummary.has(dishName)) {
+          dishSummary.get(dishName)!.count++;
+        } else {
+          dishSummary.set(dishName, { count: 1, type: dishType });
+        }
+      });
+    });
+  });
+
+  // Group dishes by type
+  const dishesByType = {
+    starter: Array.from(dishSummary.entries()).filter(([_, info]) => info.type === 'starter'),
+    main: Array.from(dishSummary.entries()).filter(([_, info]) => info.type === 'main'),
+    dessert: Array.from(dishSummary.entries()).filter(([_, info]) => info.type === 'dessert'),
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -181,6 +204,67 @@ export default function AdminBookingsPage() {
               </button>
             </div>
           </div>
+
+          {/* Dish Summary */}
+          {bookings.length > 0 && (
+            <div className="card-christmas p-6 mb-6">
+              <h2 className="text-2xl font-bold mb-4 pb-3 border-b-2" style={{ color: 'var(--christmas-red)', borderColor: 'var(--christmas-green)' }}>
+                📊 Dish Summary
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {/* Starters */}
+                <div>
+                  <h3 className="font-bold text-lg mb-3 flex items-center gap-2" style={{ color: 'var(--christmas-green)' }}>
+                    🥗 Starters
+                  </h3>
+                  <div className="space-y-2">
+                    {dishesByType.starter.sort((a, b) => b[1].count - a[1].count).map(([dish, info]) => (
+                      <div key={dish} className="flex justify-between items-center p-2 bg-gray-50 rounded">
+                        <span className="text-sm">{dish}</span>
+                        <span className="font-bold text-base px-3 py-1 bg-green-100 text-green-800 rounded-full">
+                          {info.count}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Mains */}
+                <div>
+                  <h3 className="font-bold text-lg mb-3 flex items-center gap-2" style={{ color: 'var(--christmas-green)' }}>
+                    🍗 Mains
+                  </h3>
+                  <div className="space-y-2">
+                    {dishesByType.main.sort((a, b) => b[1].count - a[1].count).map(([dish, info]) => (
+                      <div key={dish} className="flex justify-between items-center p-2 bg-gray-50 rounded">
+                        <span className="text-sm">{dish}</span>
+                        <span className="font-bold text-base px-3 py-1 bg-green-100 text-green-800 rounded-full">
+                          {info.count}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Desserts */}
+                <div>
+                  <h3 className="font-bold text-lg mb-3 flex items-center gap-2" style={{ color: 'var(--christmas-green)' }}>
+                    🍰 Desserts
+                  </h3>
+                  <div className="space-y-2">
+                    {dishesByType.dessert.sort((a, b) => b[1].count - a[1].count).map(([dish, info]) => (
+                      <div key={dish} className="flex justify-between items-center p-2 bg-gray-50 rounded">
+                        <span className="text-sm">{dish}</span>
+                        <span className="font-bold text-base px-3 py-1 bg-green-100 text-green-800 rounded-full">
+                          {info.count}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* Table */}
           <div className="card-christmas p-6 overflow-x-auto">
