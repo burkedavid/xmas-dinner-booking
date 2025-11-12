@@ -64,6 +64,29 @@ function ConfirmationContent() {
     );
   }
 
+  // Calculate surcharge breakdown
+  const surchargeItems: Array<{ name: string; amount: number }> = [];
+  let totalSurcharges = 0;
+  const depositPerPerson = 10.00;
+  const baseDeposit = booking.total_guests * depositPerPerson;
+
+  booking.guests?.forEach(guest => {
+    const orders = guest.orders || [];
+    orders.forEach(order => {
+      const surcharge = Number(order.menu_item?.surcharge) || 0;
+      if (surcharge > 0) {
+        surchargeItems.push({
+          name: order.menu_item.name,
+          amount: surcharge
+        });
+        totalSurcharges += surcharge;
+      }
+    });
+  });
+
+  const subtotal = baseDeposit + totalSurcharges;
+  const tip = subtotal * 0.10;
+
   return (
     <div className="min-h-screen relative">
       <Snowfall />
@@ -102,15 +125,38 @@ function ConfirmationContent() {
             </p>
 
             <div className="bg-gradient-to-br from-green-50 to-green-100 border-2 border-green-500 rounded-xl p-6 mb-6 shadow-inner">
+              <div className="flex justify-between items-center mb-3">
+                <span className="font-medium text-base">Deposit (£{depositPerPerson} × {booking.total_guests} guest{booking.total_guests !== 1 ? 's' : ''}):</span>
+                <span className="font-bold text-lg">{formatCurrency(baseDeposit)}</span>
+              </div>
+              {surchargeItems.length > 0 && (
+                <div className="mb-3">
+                  <div className="font-medium text-base mb-2">Surcharges:</div>
+                  <div className="ml-4 space-y-1">
+                    {surchargeItems.map((item, idx) => (
+                      <div key={idx} className="flex justify-between items-center text-sm">
+                        <span className="text-gray-700">{item.name}</span>
+                        <span className="font-bold text-red-600">+{formatCurrency(item.amount)}</span>
+                      </div>
+                    ))}
+                    <div className="flex justify-between items-center pt-1 border-t border-gray-300">
+                      <span className="font-medium">Total Surcharges:</span>
+                      <span className="font-bold text-red-600">+{formatCurrency(totalSurcharges)}</span>
+                    </div>
+                  </div>
+                </div>
+              )}
               <div className="flex justify-between items-center mb-4">
-                <span className="font-bold text-2xl">Deposit Amount:</span>
+                <span className="font-medium text-base">10% tip:</span>
+                <span className="font-bold text-lg">{formatCurrency(tip)}</span>
+              </div>
+              <div className="border-t-2 border-green-700 my-4"></div>
+              <div className="flex justify-between items-center">
+                <span className="font-bold text-2xl">Total Deposit Amount:</span>
                 <span className="font-bold text-4xl" style={{ color: 'var(--christmas-red)' }}>
                   {formatCurrency(Number(booking.total_amount))}
                 </span>
               </div>
-              <p className="text-base text-gray-600">
-                £10.00 per person × {booking.total_guests} guests
-              </p>
             </div>
 
             <a

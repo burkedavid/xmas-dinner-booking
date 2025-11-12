@@ -91,19 +91,31 @@ export default function ReviewPage() {
   const depositPerPerson = 10.00;
   const baseDeposit = bookingData.guests.length * depositPerPerson;
 
+  // Collect surcharge items with details
+  const surchargeItems: Array<{ name: string; amount: number }> = [];
   let totalSurcharges = 0;
+
   bookingData.guests.forEach(guest => {
     if (guest.orders.starter) {
       const item = menuItems.starter.find(i => i.id === guest.orders.starter);
-      if (item) totalSurcharges += Number(item.surcharge) || 0;
+      if (item && Number(item.surcharge) > 0) {
+        surchargeItems.push({ name: item.name, amount: Number(item.surcharge) });
+        totalSurcharges += Number(item.surcharge);
+      }
     }
     if (guest.orders.main) {
       const item = menuItems.main.find(i => i.id === guest.orders.main);
-      if (item) totalSurcharges += Number(item.surcharge) || 0;
+      if (item && Number(item.surcharge) > 0) {
+        surchargeItems.push({ name: item.name, amount: Number(item.surcharge) });
+        totalSurcharges += Number(item.surcharge);
+      }
     }
     if (guest.orders.dessert) {
       const item = menuItems.dessert.find(i => i.id === guest.orders.dessert);
-      if (item) totalSurcharges += Number(item.surcharge) || 0;
+      if (item && Number(item.surcharge) > 0) {
+        surchargeItems.push({ name: item.name, amount: Number(item.surcharge) });
+        totalSurcharges += Number(item.surcharge);
+      }
     }
   });
 
@@ -203,10 +215,21 @@ export default function ReviewPage() {
                 <span className="font-medium text-base">Deposit (£{depositPerPerson} × {bookingData.guests.length} guest{bookingData.guests.length !== 1 ? 's' : ''}):</span>
                 <span className="font-bold text-lg">{formatCurrency(baseDeposit)}</span>
               </div>
-              {totalSurcharges > 0 && (
-                <div className="flex justify-between items-center mb-3">
-                  <span className="font-medium text-base">Surcharges:</span>
-                  <span className="font-bold text-lg text-red-600">+{formatCurrency(totalSurcharges)}</span>
+              {surchargeItems.length > 0 && (
+                <div className="mb-3">
+                  <div className="font-medium text-base mb-2">Surcharges:</div>
+                  <div className="ml-4 space-y-1">
+                    {surchargeItems.map((item, idx) => (
+                      <div key={idx} className="flex justify-between items-center text-sm">
+                        <span className="text-gray-700">{item.name}</span>
+                        <span className="font-bold text-red-600">+{formatCurrency(item.amount)}</span>
+                      </div>
+                    ))}
+                    <div className="flex justify-between items-center pt-1 border-t border-gray-300">
+                      <span className="font-medium">Total Surcharges:</span>
+                      <span className="font-bold text-red-600">+{formatCurrency(totalSurcharges)}</span>
+                    </div>
+                  </div>
                 </div>
               )}
               <div className="flex justify-between items-center mb-4">
