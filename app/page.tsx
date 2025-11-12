@@ -43,7 +43,7 @@ export default function Home() {
             </Link>
 
             <p className="mt-3 text-sm text-gray-700">
-              £10 deposit per person • Full payment on the night
+              £11 deposit per person • Full payment on the night
             </p>
           </motion.div>
 
@@ -71,15 +71,15 @@ export default function Home() {
             className="grid grid-cols-1 md:grid-cols-2 gap-6"
           >
             {/* Date & Time */}
-            <div className="p-6 bg-white/80 backdrop-blur-md rounded-2xl shadow-lg border border-red-100 hover:scale-[1.02] transition-transform">
-              <h3 className="text-lg font-bold text-gray-900 mb-2">📅 Date & Time</h3>
+            <div className="p-8 bg-white/90 backdrop-blur-md rounded-2xl shadow-md hover:shadow-xl transition-all">
+              <h3 className="text-lg font-bold text-gray-900 mb-3">📅 Date & Time</h3>
               <p className="text-2xl font-bold text-red-700">20th December</p>
               <p className="text-lg text-gray-800">3:00 PM</p>
             </div>
 
             {/* Venue */}
-            <div className="p-6 bg-white/80 backdrop-blur-md rounded-2xl shadow-lg border border-green-100 hover:scale-[1.02] transition-transform">
-              <h3 className="text-lg font-bold text-gray-900 mb-2">📍 Venue</h3>
+            <div className="p-8 bg-white/90 backdrop-blur-md rounded-2xl shadow-md hover:shadow-xl transition-all">
+              <h3 className="text-lg font-bold text-gray-900 mb-3">📍 Venue</h3>
               <p className="font-bold text-gray-800">Millars Grill & Seafood</p>
               <p className="text-sm text-gray-600 mb-2">
                 1D Lanyon Quay, Belfast, BT1 3LG
@@ -88,7 +88,7 @@ export default function Home() {
                 href="https://www.millarsgrillandseafood.com/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 text-sm text-green-700 hover:text-green-900 font-semibold"
+                className="inline-flex items-center gap-1 text-sm text-green-700 hover:text-green-900 font-semibold transition-colors"
               >
                 <ExternalLink className="w-3 h-3" />
                 Visit Website
@@ -101,7 +101,7 @@ export default function Home() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.6 }}
-            className="bg-white/80 backdrop-blur-lg rounded-2xl p-8 shadow-xl border border-red-100"
+            className="bg-white/90 backdrop-blur-lg rounded-2xl p-8 shadow-md hover:shadow-xl transition-all"
           >
             <h2 className="text-2xl font-bold text-center text-gray-900 mb-6">
               🎁 How to Book
