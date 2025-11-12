@@ -46,14 +46,13 @@ export default function Home() {
             </p>
           </motion.div>
 
-          {/* Image with Festive Frame */}
+          {/* Featured Image */}
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="relative w-full h-80 rounded-[2rem] overflow-hidden shadow-2xl border-[8px] border-green-600/30 bg-white/10 backdrop-blur-sm"
+            className="relative w-full h-80 rounded-xl overflow-hidden shadow-xl"
           >
-            <div className="absolute inset-0 border-[6px] border-dashed border-red-400/70 rounded-[2rem] pointer-events-none" />
             <Image
               src="/photos/a.jpg"
               alt="Christmas Dinner Event"

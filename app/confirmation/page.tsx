@@ -142,7 +142,7 @@ function ConfirmationContent() {
                 <CheckCircle className="w-10 h-10 text-green-700" />
               </div>
             </div>
-            <h1 className="text-3xl md:text-4xl font-bold mb-2 bg-gradient-to-r from-red-600 via-green-600 to-red-600 bg-clip-text text-transparent">
+            <h1 className="text-3xl md:text-4xl font-bold mb-2 text-green-700">
               Booking Confirmed!
             </h1>
             <p className="text-sm md:text-base text-gray-600 mb-3">Your Christmas dinner is reserved</p>

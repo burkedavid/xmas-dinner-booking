@@ -134,7 +134,7 @@ export default function ReviewPage() {
           <div className="text-center mb-6 fade-in">
             <div className="flex items-center justify-center gap-2 mb-3">
               <ClipboardList className="w-6 h-6 text-red-600" />
-              <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-red-600 via-green-600 to-red-600 bg-clip-text text-transparent">
+              <h1 className="text-3xl md:text-4xl font-bold text-red-700">
                 Review Your Order
               </h1>
             </div>

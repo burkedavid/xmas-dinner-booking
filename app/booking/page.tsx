@@ -147,7 +147,7 @@ export default function BookingPage() {
       <div className="container mx-auto px-3 py-3 relative z-10 max-w-7xl">
         {/* Header */}
         <div className="text-center mb-4 fade-in">
-          <h1 className="text-2xl md:text-4xl font-bold mb-2 bg-gradient-to-r from-red-600 via-green-600 to-red-600 bg-clip-text text-transparent">
+          <h1 className="text-2xl md:text-4xl font-bold mb-2 text-red-700">
             Book Your Christmas Dinner
           </h1>
           <p className="text-sm text-gray-600 max-w-2xl mx-auto">
@@ -192,14 +192,14 @@ export default function BookingPage() {
               <div className="border-t-2 border-gray-200 mb-4"></div>
 
               {/* Starter Selection */}
-              <div className="mb-3">
+              <div className="mt-5 mb-3">
                 <div className="flex items-center gap-2 mb-2">
                   <Salad className="w-4 h-4 text-green-700" />
                   <label className="text-base lg:text-lg font-bold" style={{ color: 'var(--christmas-green)' }}>
                     Starter *
                   </label>
                 </div>
-                <div className="grid grid-cols-1 gap-2">
+                <div className="grid grid-cols-1 gap-1">
                   {menuItems.starter.map((item) => (
                     <div
                       key={item.id}
@@ -237,7 +237,7 @@ export default function BookingPage() {
               </div>
 
               {/* Main Course Selection */}
-              <div className="mb-3">
+              <div className="mt-5 mb-3">
                 <div className="flex items-center gap-2 mb-2">
                   <UtensilsCrossed className="w-4 h-4 text-red-700" />
                   <label className="text-base lg:text-lg font-bold" style={{ color: 'var(--christmas-green)' }}>
@@ -246,7 +246,7 @@ export default function BookingPage() {
                 </div>
 
                 {/* Regular Main Options */}
-                <div className="grid grid-cols-1 gap-2 mb-3">
+                <div className="grid grid-cols-1 gap-1 mb-3">
                   {menuItems.main.filter(item => item.subcategory === 'regular' || !item.subcategory).map((item) => (
                     <div
                       key={item.id}
@@ -290,7 +290,7 @@ export default function BookingPage() {
                       OR CHOOSE A PREMIUM STEAK:
                     </p>
                   </div>
-                  <div className="grid grid-cols-1 gap-2">
+                  <div className="grid grid-cols-1 gap-1">
                     {menuItems.main.filter(item => item.subcategory === 'steak').map((item) => (
                       <div
                         key={item.id}
@@ -329,14 +329,14 @@ export default function BookingPage() {
               </div>
 
               {/* Dessert Selection */}
-              <div className="mb-3">
+              <div className="mt-5 mb-3">
                 <div className="flex items-center gap-2 mb-2">
                   <Cake className="w-4 h-4 text-yellow-700" />
                   <label className="text-base lg:text-lg font-bold" style={{ color: 'var(--christmas-green)' }}>
                     Dessert *
                   </label>
                 </div>
-                <div className="grid grid-cols-1 gap-2">
+                <div className="grid grid-cols-1 gap-1">
                   {menuItems.dessert.map((item) => (
                     <div
                       key={item.id}
