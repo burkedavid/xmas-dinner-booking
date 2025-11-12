@@ -1,0 +1,85 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --christmas-red: #C41E3A;
+  --christmas-green: #165B33;
+  --christmas-gold: #FFD700;
+  --christmas-white: #FFFAFA;
+  --christmas-dark-red: #8B0000;
+  --christmas-dark-green: #0F3D20;
+  --background: #FFFAFA;
+  --foreground: #1a1a1a;
+}
+
+body {
+  background: linear-gradient(135deg, #FFFAFA 0%, #F5F5F5 100%);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  min-height: 100vh;
+}
+
+/* Snowflake Animation */
+@keyframes snowfall {
+  0% {
+    transform: translateY(-10vh) translateX(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(110vh) translateX(100px);
+    opacity: 0.3;
+  }
+}
+
+.snowflake {
+  position: fixed;
+  top: -10vh;
+  z-index: 9999;
+  user-select: none;
+  cursor: default;
+  animation: snowfall linear infinite;
+  color: #ffffff;
+  opacity: 0.8;
+  pointer-events: none;
+}
+
+/* Christmas button styles */
+.btn-christmas {
+  background: linear-gradient(135deg, var(--christmas-red) 0%, var(--christmas-dark-red) 100%);
+  color: white;
+  border: 2px solid var(--christmas-gold);
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(196, 30, 58, 0.3);
+}
+
+.btn-christmas:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(196, 30, 58, 0.4);
+  background: linear-gradient(135deg, var(--christmas-dark-red) 0%, var(--christmas-red) 100%);
+}
+
+.card-christmas {
+  background: white;
+  border: 2px solid var(--christmas-gold);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--christmas-green);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--christmas-dark-green);
+}
