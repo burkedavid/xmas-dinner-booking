@@ -297,13 +297,13 @@ export default function ReviewPage() {
             <button
               onClick={handleConfirmBooking}
               disabled={loading}
-              className="flex-1 btn-christmas py-5 rounded-lg font-bold text-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center gap-3"
+              className="flex-1 btn-christmas py-6 rounded-lg font-bold text-2xl shadow-lg hover:shadow-xl hover:scale-105 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center gap-3"
             >
               {loading ? (
                 'Processing...'
               ) : (
                 <>
-                  <CheckCircle className="w-6 h-6" />
+                  <CheckCircle className="w-7 h-7" />
                   Confirm & Pay Deposit
                 </>
               )}

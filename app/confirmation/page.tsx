@@ -217,9 +217,9 @@ function ConfirmationContent() {
               href={booking.monzo_payment_link || '#'}
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-christmas flex items-center justify-center gap-3 text-center py-5 rounded-lg font-bold text-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all"
+              className="btn-christmas flex items-center justify-center gap-3 text-center py-6 rounded-lg font-bold text-2xl shadow-lg hover:shadow-xl hover:scale-105 transition-all"
             >
-              <ExternalLink className="w-6 h-6" />
+              <ExternalLink className="w-7 h-7" />
               Pay Deposit via Monzo
             </a>
 
