@@ -175,7 +175,7 @@ export default function BookingPage() {
               </div>
 
               {/* Guest Name */}
-              <div className="mb-3">
+              <div className="mb-6">
                 <label className="label-modern text-sm">
                   {index === 0 ? 'Your Name *' : 'Guest Name *'}
                 </label>
@@ -187,6 +187,9 @@ export default function BookingPage() {
                   placeholder={index === 0 ? "Enter your name" : "Guest name"}
                 />
               </div>
+
+              {/* Divider */}
+              <div className="border-t-2 border-gray-200 mb-4"></div>
 
               {/* Starter Selection */}
               <div className="mb-3">
@@ -459,11 +462,11 @@ export default function BookingPage() {
 
           <button
             onClick={validateAndSubmit}
-            className="btn-christmas w-full py-5 rounded-lg font-bold text-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all flex items-center justify-center gap-3"
+            className="btn-christmas w-full py-6 rounded-lg font-bold text-2xl shadow-lg hover:shadow-xl hover:scale-105 transition-all flex items-center justify-center gap-3"
           >
-            <TreePine className="w-6 h-6" />
+            <TreePine className="w-7 h-7" />
             Review Order
-            <ArrowRight className="w-6 h-6" />
+            <ArrowRight className="w-7 h-7" />
           </button>
 
           <p className="text-center text-base text-gray-600 mt-4">

@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import Snowfall from '@/components/Snowfall';
-import { TreePine, ArrowRight, Calendar, Clock, MapPin, ExternalLink } from 'lucide-react';
+import { ArrowRight, ExternalLink } from 'lucide-react';
 
 export default function Home() {
   return (
@@ -60,36 +60,30 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
             {/* Date & Time */}
             <div className="glass-effect card-christmas p-6">
-              <div className="flex items-start gap-4">
-                <Calendar className="w-6 h-6 text-red-600 mt-1 flex-shrink-0" />
-                <div>
-                  <h3 className="text-lg font-bold text-gray-900 mb-1">Date & Time</h3>
-                  <p className="text-2xl font-bold text-red-600">20th December</p>
-                  <p className="text-lg text-gray-700">3:00 PM</p>
-                </div>
+              <div>
+                <h3 className="text-lg font-bold text-gray-900 mb-2">Date & Time</h3>
+                <p className="text-2xl font-bold text-red-600">20th December</p>
+                <p className="text-lg text-gray-700">3:00 PM</p>
               </div>
             </div>
 
             {/* Venue */}
             <div className="glass-effect card-christmas p-6">
-              <div className="flex items-start gap-4">
-                <MapPin className="w-6 h-6 text-red-600 mt-1 flex-shrink-0" />
-                <div className="flex-1">
-                  <h3 className="text-lg font-bold text-gray-900 mb-1">Venue</h3>
-                  <p className="text-base font-bold text-gray-800">Millars Grill & Seafood</p>
-                  <p className="text-sm text-gray-600 mb-2">
-                    1D Lanyon Quay, Belfast, BT1 3LG
-                  </p>
-                  <a
-                    href="https://www.millarsgrillandseafood.com/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-sm text-red-600 hover:text-red-700 font-semibold"
-                  >
-                    <ExternalLink className="w-3 h-3" />
-                    Website
-                  </a>
-                </div>
+              <div>
+                <h3 className="text-lg font-bold text-gray-900 mb-2">Venue</h3>
+                <p className="text-base font-bold text-gray-800">Millars Grill & Seafood</p>
+                <p className="text-sm text-gray-600 mb-2">
+                  1D Lanyon Quay, Belfast, BT1 3LG
+                </p>
+                <a
+                  href="https://www.millarsgrillandseafood.com/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 text-sm text-red-600 hover:text-red-700 font-semibold"
+                >
+                  <ExternalLink className="w-3 h-3" />
+                  Website
+                </a>
               </div>
             </div>
           </div>
@@ -100,19 +94,14 @@ export default function Home() {
               How to Book
             </h2>
 
-            <div className="max-w-2xl mx-auto space-y-4">
+            <div className="max-w-2xl mx-auto space-y-3">
               {[
                 'Enter your contact details',
                 'Choose meals for each guest',
                 'Review your booking',
                 'Pay £10 deposit per person via Monzo'
               ].map((text, index) => (
-                <div key={index} className="flex items-start gap-4">
-                  <div className="flex-shrink-0 w-8 h-8 rounded-full bg-red-600 text-white flex items-center justify-center font-bold text-lg">
-                    {index + 1}
-                  </div>
-                  <p className="text-lg text-gray-700 pt-0.5">{text}</p>
-                </div>
+                <p key={index} className="text-lg text-gray-700">{text}</p>
               ))}
             </div>
           </div>
