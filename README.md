@@ -67,22 +67,22 @@ npm install
 
 ### 3. Environment Setup
 
-The `.env.local` file has been pre-configured with your database connection. Verify the settings:
+Create a `.env.local` file in the root directory with the following variables:
 
 ```env
 # Database
-DATABASE_URL=postgresql://neondb_owner:npg_KHFZ76neJGxP@ep-twilight-dream-ablt9bm9-pooler.eu-west-2.aws.neon.tech/neondb?sslmode=require&channel_binding=require
+DATABASE_URL=your_neon_database_connection_string
 
 # Admin Authentication
-ADMIN_PASSWORD=admin123
+ADMIN_PASSWORD=your_secure_admin_password
 
 # Monzo Payment Configuration
-MONZO_BASE_URL=https://monzo.me/davidburke45
-MONZO_HASH=UFLFPl
+MONZO_BASE_URL=https://monzo.me/yourusername
+MONZO_HASH=your_monzo_hash
 DEPOSIT_AMOUNT=10.00
 ```
 
-**IMPORTANT**: For production, change the `ADMIN_PASSWORD` to something secure!
+**IMPORTANT**: Never commit your `.env.local` file to version control!
 
 ### 4. Initialize Database
 
@@ -193,11 +193,11 @@ xmas-dinner-booking/
 
 The system automatically generates Monzo payment links based on:
 - Number of guests × deposit amount per person
-- Format: `https://monzo.me/davidburke45/[AMOUNT]?h=UFLFPl`
+- Format: `https://monzo.me/yourusername/[AMOUNT]?h=YOUR_HASH`
 
 Example for 2 guests (£10 each):
 ```
-https://monzo.me/davidburke45/20.00?h=UFLFPl
+https://monzo.me/yourusername/20.00?h=YOUR_HASH
 ```
 
 ## 🗄️ Database Schema
@@ -300,7 +300,7 @@ DEPOSIT_AMOUNT=15.00  # Change to desired amount
 
 ```bash
 # Test database connection
-psql "postgresql://neondb_owner:npg_KHFZ76neJGxP@ep-twilight-dream-ablt9bm9-pooler.eu-west-2.aws.neon.tech/neondb?sslmode=require"
+psql "$DATABASE_URL"
 ```
 
 ### Node Version Warning
