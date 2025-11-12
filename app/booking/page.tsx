@@ -2,9 +2,11 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import Snowfall from '@/components/Snowfall';
 import { formatCurrency } from '@/lib/utils';
 import type { MenuItem, BookingFormData } from '@/lib/types';
+import { TreePine, User, Users, Salad, UtensilsCrossed, Cake, UserPlus, ArrowRight, Coins, Sparkles, X } from 'lucide-react';
 
 type MenuItems = {
   starter: MenuItem[];
@@ -143,207 +145,257 @@ export default function BookingPage() {
     <div className="min-h-screen relative">
       <Snowfall />
 
-      <div className="container mx-auto px-4 py-8 relative z-10 max-w-7xl">
+      <div className="container mx-auto px-4 py-4 relative z-10 max-w-7xl">
         {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-5xl md:text-6xl font-bold mb-4" style={{ color: 'var(--christmas-red)' }}>
-            🎄 Book Your Christmas Dinner
-          </h1>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+        <div className="text-center mb-6 fade-in">
+          <div className="flex items-center justify-center gap-2 mb-3">
+            <UtensilsCrossed className="w-6 h-6 text-red-600" />
+            <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-red-600 via-green-600 to-red-600 bg-clip-text text-transparent">
+              Book Your Christmas Dinner
+            </h1>
+          </div>
+          <p className="text-sm md:text-base text-gray-600 max-w-2xl mx-auto mb-4">
             Choose your festive feast for yourself and your guests
           </p>
+          {/* Subtle decorative image */}
+          <div className="max-w-md mx-auto">
+            <div className="relative w-full h-32 rounded-lg overflow-hidden shadow-md border border-red-100 opacity-90">
+              <Image
+                src="/photos/b.jpg"
+                alt="Christmas Booking"
+                fill
+                className="object-cover"
+              />
+            </div>
+          </div>
         </div>
 
         {/* Guests Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
           {guests.map((guest, index) => (
-            <div key={index} className="card-christmas p-6 shadow-lg">
-              <div className="flex justify-between items-center mb-6 pb-3 border-b-2" style={{ borderColor: 'var(--christmas-green)' }}>
-                <h3 className="text-2xl font-bold" style={{ color: 'var(--christmas-red)' }}>
-                  {index === 0 ? '🎅 Your Order' : `👤 Guest ${index + 1}`}
-                </h3>
+            <div key={index} className="glass-effect card-christmas p-4 shadow-lg slide-in hover:shadow-xl transition-shadow duration-300" style={{ animationDelay: `${index * 0.1}s` }}>
+              <div className="flex justify-between items-center mb-4 pb-2 border-b-2" style={{ borderColor: 'var(--christmas-green)' }}>
+                <div className="flex items-center gap-3">
+                  <div className={`p-2 rounded-full ${index === 0 ? 'bg-gradient-to-br from-red-100 to-red-200' : 'bg-gradient-to-br from-green-100 to-green-200'}`}>
+                    {index === 0 ? (
+                      <User className={`w-6 h-6 ${index === 0 ? 'text-red-700' : 'text-green-700'}`} />
+                    ) : (
+                      <Users className="w-6 h-6 text-green-700" />
+                    )}
+                  </div>
+                  <h3 className="text-2xl font-bold" style={{ color: 'var(--christmas-red)' }}>
+                    {index === 0 ? 'Your Order' : `Guest ${index + 1}`}
+                  </h3>
+                </div>
                 {guests.length > 1 && index > 0 && (
                   <button
                     onClick={() => removeGuest(index)}
-                    className="px-3 py-1 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 font-bold transition text-sm"
+                    className="flex items-center gap-2 px-3 py-1 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 font-bold transition-all hover:scale-105 text-sm border-2 border-red-300 hover:border-red-400"
                   >
-                    ✕ Remove
+                    <X className="w-4 h-4" />
+                    Remove
                   </button>
                 )}
               </div>
 
               {/* Guest Name */}
-              <div className="mb-6">
-                <label className="block text-base font-bold mb-2" style={{ color: 'var(--christmas-green)' }}>
+              <div className="mb-4">
+                <label className="label-modern">
                   {index === 0 ? 'Your Name *' : 'Guest Name *'}
                 </label>
                 <input
                   type="text"
                   value={guest.guest_name}
                   onChange={(e) => updateGuestField(index, 'guest_name', e.target.value)}
-                  className="w-full px-4 py-3 text-base border-2 border-gray-300 rounded-lg focus:border-red-500 focus:ring-2 focus:ring-red-200 focus:outline-none transition-all"
+                  className="input-modern"
                   placeholder={index === 0 ? "Enter your name" : "Guest name"}
                 />
               </div>
 
               {/* Starter Selection */}
-              <div className="mb-6">
-                <label className="block text-lg font-bold mb-3" style={{ color: 'var(--christmas-green)' }}>
-                  🥗 Starter *
-                </label>
-                <div className="space-y-2">
+              <div className="mb-4">
+                <div className="flex items-center gap-2 mb-4">
+                  <div className="p-2 rounded-lg bg-gradient-to-br from-green-100 to-green-200">
+                    <Salad className="w-5 h-5 text-green-700" />
+                  </div>
+                  <label className="text-lg font-bold" style={{ color: 'var(--christmas-green)' }}>
+                    Starter *
+                  </label>
+                </div>
+                <div className="grid grid-cols-1 gap-3">
                   {menuItems.starter.map((item) => (
-                    <label
+                    <div
                       key={item.id}
-                      className={`block p-3 border-2 rounded-lg cursor-pointer transition ${
-                        guest.orders.starter === item.id
-                          ? 'border-red-500 bg-red-50'
-                          : 'border-gray-300 hover:border-red-300 hover:bg-gray-50'
-                      }`}
+                      onClick={() => updateGuestField(index, 'orders', { starter: item.id })}
+                      className={`menu-card ${guest.orders.starter === item.id ? 'menu-card-selected' : ''}`}
                     >
-                      <div className="flex items-start">
-                        <input
-                          type="radio"
-                          name={`starter-${index}`}
-                          checked={guest.orders.starter === item.id}
-                          onChange={() => updateGuestField(index, 'orders', { starter: item.id })}
-                          className="mt-1 mr-3 flex-shrink-0"
-                        />
+                      <div className="flex items-start justify-between">
                         <div className="flex-1">
-                          <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2 mb-1">
                             <span className="font-bold text-base">{item.name}</span>
-                            {item.surcharge > 0 && (
-                              <span className="ml-2 text-red-600 font-bold text-sm">+{formatCurrency(item.surcharge)}</span>
+                            {guest.orders.starter === item.id && (
+                              <div className="ml-auto">
+                                <div className="w-5 h-5 rounded-full bg-red-500 flex items-center justify-center">
+                                  <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                                  </svg>
+                                </div>
+                              </div>
                             )}
                           </div>
                           {item.description && (
-                            <p className="text-sm text-gray-600 mt-1">{item.description}</p>
+                            <p className="text-sm text-gray-600 mb-2">{item.description}</p>
+                          )}
+                          {item.surcharge > 0 && (
+                            <span className="inline-flex items-center gap-1 badge-surcharge text-xs">
+                              <Coins className="w-3 h-3" />
+                              +{formatCurrency(item.surcharge)} surcharge
+                            </span>
                           )}
                         </div>
                       </div>
-                    </label>
+                    </div>
                   ))}
                 </div>
               </div>
 
               {/* Main Course Selection */}
-              <div className="mb-6">
-                <label className="block text-lg font-bold mb-3" style={{ color: 'var(--christmas-green)' }}>
-                  🍗 Main Course *
-                </label>
+              <div className="mb-4">
+                <div className="flex items-center gap-2 mb-4">
+                  <div className="p-2 rounded-lg bg-gradient-to-br from-red-100 to-red-200">
+                    <UtensilsCrossed className="w-5 h-5 text-red-700" />
+                  </div>
+                  <label className="text-lg font-bold" style={{ color: 'var(--christmas-green)' }}>
+                    Main Course *
+                  </label>
+                </div>
 
                 {/* Regular Main Options */}
-                <div className="space-y-2 mb-4">
+                <div className="grid grid-cols-1 gap-3 mb-4">
                   {menuItems.main.filter(item => item.subcategory === 'regular' || !item.subcategory).map((item) => (
-                    <label
+                    <div
                       key={item.id}
-                      className={`block p-3 border-2 rounded-lg cursor-pointer transition ${
-                        guest.orders.main === item.id
-                          ? 'border-red-500 bg-red-50'
-                          : 'border-gray-300 hover:border-red-300 hover:bg-gray-50'
-                      }`}
+                      onClick={() => updateGuestField(index, 'orders', { main: item.id })}
+                      className={`menu-card ${guest.orders.main === item.id ? 'menu-card-selected' : ''}`}
                     >
-                      <div className="flex items-start">
-                        <input
-                          type="radio"
-                          name={`main-${index}`}
-                          checked={guest.orders.main === item.id}
-                          onChange={() => updateGuestField(index, 'orders', { main: item.id })}
-                          className="mt-1 mr-3 flex-shrink-0"
-                        />
+                      <div className="flex items-start justify-between">
                         <div className="flex-1">
-                          <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2 mb-1">
                             <span className="font-bold text-base">{item.name}</span>
-                            {item.surcharge > 0 && (
-                              <span className="ml-2 text-red-600 font-bold text-sm">+{formatCurrency(item.surcharge)}</span>
+                            {guest.orders.main === item.id && (
+                              <div className="ml-auto">
+                                <div className="w-5 h-5 rounded-full bg-red-500 flex items-center justify-center">
+                                  <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                                  </svg>
+                                </div>
+                              </div>
                             )}
                           </div>
                           {item.description && (
-                            <p className="text-sm text-gray-600 mt-1">{item.description}</p>
+                            <p className="text-sm text-gray-600 mb-2">{item.description}</p>
+                          )}
+                          {item.surcharge > 0 && (
+                            <span className="inline-flex items-center gap-1 badge-surcharge text-xs">
+                              <Coins className="w-3 h-3" />
+                              +{formatCurrency(item.surcharge)} surcharge
+                            </span>
                           )}
                         </div>
                       </div>
-                    </label>
+                    </div>
                   ))}
                 </div>
 
                 {/* Steak Options */}
-                <div className="border-t-2 border-gray-300 pt-3 mt-3">
-                  <p className="text-sm font-bold mb-3" style={{ color: 'var(--christmas-green)' }}>
-                    OR CHOOSE A STEAK:
-                  </p>
-                  <div className="space-y-2">
+                <div className="border-t-2 border-gray-200 pt-4 mt-2">
+                  <div className="flex items-center gap-2 mb-3">
+                    <Sparkles className="w-4 h-4 text-yellow-600" />
+                    <p className="text-sm font-bold" style={{ color: 'var(--christmas-green)' }}>
+                      OR CHOOSE A PREMIUM STEAK:
+                    </p>
+                  </div>
+                  <div className="grid grid-cols-1 gap-3">
                     {menuItems.main.filter(item => item.subcategory === 'steak').map((item) => (
-                      <label
+                      <div
                         key={item.id}
-                        className={`block p-3 border-2 rounded-lg cursor-pointer transition ${
-                          guest.orders.main === item.id
-                            ? 'border-red-500 bg-red-50'
-                            : 'border-gray-300 hover:border-red-300 hover:bg-gray-50'
-                        }`}
+                        onClick={() => updateGuestField(index, 'orders', { main: item.id })}
+                        className={`menu-card ${guest.orders.main === item.id ? 'menu-card-selected' : ''}`}
                       >
-                        <div className="flex items-start">
-                          <input
-                            type="radio"
-                            name={`main-${index}`}
-                            checked={guest.orders.main === item.id}
-                            onChange={() => updateGuestField(index, 'orders', { main: item.id })}
-                            className="mt-1 mr-3 flex-shrink-0"
-                          />
+                        <div className="flex items-start justify-between">
                           <div className="flex-1">
-                            <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-2 mb-1">
                               <span className="font-bold text-base">{item.name}</span>
-                              {item.surcharge > 0 && (
-                                <span className="ml-2 text-red-600 font-bold text-sm">+{formatCurrency(item.surcharge)}</span>
+                              {guest.orders.main === item.id && (
+                                <div className="ml-auto">
+                                  <div className="w-5 h-5 rounded-full bg-red-500 flex items-center justify-center">
+                                    <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                                    </svg>
+                                  </div>
+                                </div>
                               )}
                             </div>
                             {item.description && (
-                              <p className="text-sm text-gray-600 mt-1">{item.description}</p>
+                              <p className="text-sm text-gray-600 mb-2">{item.description}</p>
+                            )}
+                            {item.surcharge > 0 && (
+                              <span className="inline-flex items-center gap-1 badge-surcharge text-xs">
+                                <Coins className="w-3 h-3" />
+                                +{formatCurrency(item.surcharge)} surcharge
+                              </span>
                             )}
                           </div>
                         </div>
-                      </label>
+                      </div>
                     ))}
                   </div>
                 </div>
               </div>
 
               {/* Dessert Selection */}
-              <div className="mb-6">
-                <label className="block text-lg font-bold mb-3" style={{ color: 'var(--christmas-green)' }}>
-                  🍰 Dessert *
-                </label>
-                <div className="space-y-2">
+              <div className="mb-4">
+                <div className="flex items-center gap-2 mb-4">
+                  <div className="p-2 rounded-lg bg-gradient-to-br from-yellow-100 to-yellow-200">
+                    <Cake className="w-5 h-5 text-yellow-700" />
+                  </div>
+                  <label className="text-lg font-bold" style={{ color: 'var(--christmas-green)' }}>
+                    Dessert *
+                  </label>
+                </div>
+                <div className="grid grid-cols-1 gap-3">
                   {menuItems.dessert.map((item) => (
-                    <label
+                    <div
                       key={item.id}
-                      className={`block p-3 border-2 rounded-lg cursor-pointer transition ${
-                        guest.orders.dessert === item.id
-                          ? 'border-red-500 bg-red-50'
-                          : 'border-gray-300 hover:border-red-300 hover:bg-gray-50'
-                      }`}
+                      onClick={() => updateGuestField(index, 'orders', { dessert: item.id })}
+                      className={`menu-card ${guest.orders.dessert === item.id ? 'menu-card-selected' : ''}`}
                     >
-                      <div className="flex items-start">
-                        <input
-                          type="radio"
-                          name={`dessert-${index}`}
-                          checked={guest.orders.dessert === item.id}
-                          onChange={() => updateGuestField(index, 'orders', { dessert: item.id })}
-                          className="mt-1 mr-3 flex-shrink-0"
-                        />
+                      <div className="flex items-start justify-between">
                         <div className="flex-1">
-                          <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2 mb-1">
                             <span className="font-bold text-base">{item.name}</span>
-                            {item.surcharge > 0 && (
-                              <span className="ml-2 text-red-600 font-bold text-sm">+{formatCurrency(item.surcharge)}</span>
+                            {guest.orders.dessert === item.id && (
+                              <div className="ml-auto">
+                                <div className="w-5 h-5 rounded-full bg-red-500 flex items-center justify-center">
+                                  <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                                  </svg>
+                                </div>
+                              </div>
                             )}
                           </div>
                           {item.description && (
-                            <p className="text-sm text-gray-600 mt-1">{item.description}</p>
+                            <p className="text-sm text-gray-600 mb-2">{item.description}</p>
+                          )}
+                          {item.surcharge > 0 && (
+                            <span className="inline-flex items-center gap-1 badge-surcharge text-xs">
+                              <Coins className="w-3 h-3" />
+                              +{formatCurrency(item.surcharge)} surcharge
+                            </span>
                           )}
                         </div>
                       </div>
-                    </label>
+                    </div>
                   ))}
                 </div>
               </div>
@@ -352,21 +404,27 @@ export default function BookingPage() {
         </div>
 
         {/* Add Guest Button */}
-        <div className="max-w-2xl mx-auto mb-8">
+        <div className="max-w-2xl mx-auto mb-6">
           <button
             onClick={addGuest}
-            className="w-full py-4 border-2 border-dashed border-green-600 rounded-lg font-bold text-lg text-green-700 hover:bg-green-50 hover:border-solid hover:shadow-md transition-all"
+            className="w-full py-4 border-2 border-dashed border-green-600 rounded-lg font-bold text-lg text-green-700 hover:bg-green-50 hover:border-solid hover:shadow-md transition-all hover:scale-[1.02] flex items-center justify-center gap-3"
           >
-            ➕ Add Another Guest
+            <UserPlus className="w-6 h-6" />
+            Add Another Guest
           </button>
         </div>
 
         {/* Total and Submit */}
         <div className="max-w-2xl mx-auto">
-          <div className="card-christmas p-8 mb-6 shadow-xl">
-            <h2 className="text-2xl font-bold mb-4 pb-3 border-b-2" style={{ color: 'var(--christmas-red)', borderColor: 'var(--christmas-green)' }}>
-              💰 Payment Summary
-            </h2>
+          <div className="glass-effect card-christmas p-4 mb-4 shadow-xl">
+            <div className="flex items-center gap-3 mb-4 pb-3 border-b-2" style={{ borderColor: 'var(--christmas-green)' }}>
+              <div className="p-2 rounded-lg bg-gradient-to-br from-green-100 to-green-200">
+                <Coins className="w-6 h-6 text-green-700" />
+              </div>
+              <h2 className="text-2xl font-bold" style={{ color: 'var(--christmas-red)' }}>
+                Payment Summary
+              </h2>
+            </div>
             <div className="bg-gradient-to-br from-green-50 to-green-100 border-2 border-green-500 rounded-xl p-6 shadow-inner">
               <div className="flex justify-between items-center mb-3">
                 <span className="font-medium text-base">Deposit (£{depositPerPerson} × {guests.length} guest{guests.length !== 1 ? 's' : ''}):</span>
@@ -424,16 +482,18 @@ export default function BookingPage() {
                 </span>
               </div>
               <p className="text-xs text-gray-600 mt-3 text-center">
-                3 courses for £37 per person (full amount due on the night)
+                Full amount due on the night
               </p>
             </div>
           </div>
 
           <button
             onClick={validateAndSubmit}
-            className="btn-christmas w-full py-5 rounded-lg font-bold text-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all"
+            className="btn-christmas w-full py-5 rounded-lg font-bold text-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all flex items-center justify-center gap-3"
           >
-            🎄 Review Order →
+            <TreePine className="w-6 h-6" />
+            Review Order
+            <ArrowRight className="w-6 h-6" />
           </button>
 
           <p className="text-center text-base text-gray-600 mt-4">

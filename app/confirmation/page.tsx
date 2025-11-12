@@ -3,9 +3,12 @@
 import { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import Snowfall from '@/components/Snowfall';
 import { formatCurrency, formatDate } from '@/lib/utils';
 import { BookingWithDetails } from '@/lib/types';
+import { PartyPopper, TreePine, Ticket, CreditCard, ClipboardList, AlertCircle, Printer, Home, Salad, UtensilsCrossed, Cake, User, CheckCircle, ExternalLink } from 'lucide-react';
+import confetti from 'canvas-confetti';
 
 function ConfirmationContent() {
   const searchParams = useSearchParams();
@@ -39,10 +42,44 @@ function ConfirmationContent() {
     loadBooking();
   }, [bookingRef]);
 
+  // Trigger confetti animation when booking loads successfully
+  useEffect(() => {
+    if (booking) {
+      const duration = 3000;
+      const end = Date.now() + duration;
+
+      const colors = ['#C41E3A', '#165B33', '#FFD700'];
+
+      (function frame() {
+        confetti({
+          particleCount: 3,
+          angle: 60,
+          spread: 55,
+          origin: { x: 0 },
+          colors: colors
+        });
+        confetti({
+          particleCount: 3,
+          angle: 120,
+          spread: 55,
+          origin: { x: 1 },
+          colors: colors
+        });
+
+        if (Date.now() < end) {
+          requestAnimationFrame(frame);
+        }
+      }());
+    }
+  }, [booking]);
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="text-2xl">Loading booking details... 🎄</div>
+        <div className="flex items-center gap-3 text-2xl">
+          <TreePine className="w-8 h-8 text-green-600 animate-pulse" />
+          Loading booking details...
+        </div>
       </div>
     );
   }
@@ -50,13 +87,18 @@ function ConfirmationContent() {
   if (!booking) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="card-christmas p-8 text-center max-w-md">
-          <div className="text-6xl mb-4">❌</div>
+        <div className="glass-effect card-christmas p-8 text-center max-w-md">
+          <div className="flex justify-center mb-4">
+            <div className="p-4 rounded-full bg-red-100">
+              <AlertCircle className="w-16 h-16 text-red-600" />
+            </div>
+          </div>
           <h1 className="text-2xl font-bold mb-4">Booking Not Found</h1>
           <p className="text-gray-600 mb-6">
             We couldn&apos;t find a booking with this reference.
           </p>
-          <Link href="/" className="btn-christmas inline-block px-8 py-3 rounded-lg font-bold">
+          <Link href="/" className="btn-christmas inline-flex items-center gap-2 px-8 py-3 rounded-lg font-bold">
+            <Home className="w-5 h-5" />
             Return Home
           </Link>
         </div>
@@ -91,35 +133,47 @@ function ConfirmationContent() {
     <div className="min-h-screen relative">
       <Snowfall />
 
-      <div className="container mx-auto px-4 py-8 relative z-10">
+      <div className="container mx-auto px-4 py-4 relative z-10">
         <div className="max-w-3xl mx-auto">
           {/* Success Message */}
-          <div className="text-center mb-12">
-            <div className="text-7xl mb-6">🎉</div>
-            <h1 className="text-5xl md:text-6xl font-bold mb-4" style={{ color: 'var(--christmas-red)' }}>
+          <div className="text-center mb-6 fade-in">
+            <div className="flex justify-center mb-3">
+              <div className="p-3 rounded-full bg-gradient-to-br from-green-100 to-green-200">
+                <CheckCircle className="w-10 h-10 text-green-700" />
+              </div>
+            </div>
+            <h1 className="text-3xl md:text-4xl font-bold mb-2 bg-gradient-to-r from-red-600 via-green-600 to-red-600 bg-clip-text text-transparent">
               Booking Confirmed!
             </h1>
-            <p className="text-xl text-gray-600">
-              Your Christmas dinner is reserved
-            </p>
+            <p className="text-sm md:text-base text-gray-600 mb-3">Your Christmas dinner is reserved</p>
+            {/* Inline Reference */}
+            <div className="inline-flex items-center gap-2 bg-green-50 px-4 py-2 rounded-lg border border-green-200">
+              <Ticket className="w-4 h-4 text-green-600" />
+              <span className="text-xs text-gray-600">Ref:</span>
+              <span className="text-base font-bold font-mono text-green-700">{booking.booking_reference}</span>
+            </div>
           </div>
 
-          {/* Booking Reference */}
-          <div className="card-christmas p-8 mb-8 text-center shadow-xl">
-            <p className="text-base text-gray-600 mb-2">Booking Reference</p>
-            <p className="text-4xl font-bold mb-3" style={{ color: 'var(--christmas-green)' }}>
-              {booking.booking_reference}
-            </p>
-            <p className="text-base text-gray-600">
-              Please keep this reference for your records
-            </p>
+          {/* Celebration Image */}
+          <div className="mb-4 fade-in">
+            <div className="relative w-full h-48 rounded-xl overflow-hidden shadow-lg border-2 border-green-200 opacity-95">
+              <Image
+                src="/photos/c.jpg"
+                alt="Christmas Celebration"
+                fill
+                className="object-cover"
+              />
+            </div>
           </div>
 
           {/* Payment Information */}
-          <div className="card-christmas p-8 mb-8 shadow-xl" style={{ borderColor: 'var(--christmas-red)', borderWidth: '3px' }}>
-            <h2 className="text-3xl font-bold mb-6 pb-4 border-b-2" style={{ color: 'var(--christmas-red)', borderColor: 'var(--christmas-green)' }}>
-              💳 Complete Your Payment
-            </h2>
+          <div className="glass-effect card-christmas p-4 mb-4 shadow-xl slide-in" style={{ borderColor: 'var(--christmas-red)', borderWidth: '3px', animationDelay: '0.1s' }}>
+            <div className="flex items-center gap-2 mb-4 pb-3 border-b-2" style={{ borderColor: 'var(--christmas-green)' }}>
+              <CreditCard className="w-5 h-5 text-red-700" />
+              <h2 className="text-xl font-bold" style={{ color: 'var(--christmas-red)' }}>
+                Complete Your Payment
+              </h2>
+            </div>
             <p className="text-base text-gray-700 mb-6">
               To secure your booking, please pay the deposit amount via Monzo:
             </p>
@@ -163,37 +217,38 @@ function ConfirmationContent() {
               href={booking.monzo_payment_link || '#'}
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-christmas block text-center py-5 rounded-lg font-bold text-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all"
+              className="btn-christmas flex items-center justify-center gap-3 text-center py-5 rounded-lg font-bold text-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all"
             >
-              🔗 Pay Deposit via Monzo
+              <ExternalLink className="w-6 h-6" />
+              Pay Deposit via Monzo
             </a>
 
-            <p className="text-sm text-gray-600 mt-4 text-center">
-              Payment Status: <span className={booking.payment_status === 'paid' ? 'text-green-600 font-bold' : 'text-orange-600 font-bold'}>
-                {booking.payment_status === 'paid' ? '✅ PAID' : '⏳ PENDING'}
-              </span>
-            </p>
+            <div className="flex items-center justify-center gap-2 mt-4">
+              <p className="text-sm text-gray-600">Payment Status:</p>
+              {booking.payment_status === 'paid' ? (
+                <span className="inline-flex items-center gap-1 badge-success">
+                  <CheckCircle className="w-4 h-4" />
+                  PAID
+                </span>
+              ) : (
+                <span className="badge-pending">
+                  PENDING
+                </span>
+              )}
+            </div>
           </div>
 
           {/* Booking Details */}
-          <div className="card-christmas p-8 mb-8 shadow-xl">
-            <h2 className="text-3xl font-bold mb-6 pb-4 border-b-2" style={{ color: 'var(--christmas-red)', borderColor: 'var(--christmas-green)' }}>
-              📋 Booking Details
-            </h2>
-
-            {/* Organizer Info */}
-            <div className="mb-6 p-4 bg-gray-50 rounded-lg">
-              <h3 className="font-bold mb-2">Organizer:</h3>
-              <p>{booking.organizer_name}</p>
-              <p>{booking.organizer_email}</p>
-              <p>{booking.organizer_phone}</p>
-              <p className="text-sm text-gray-600 mt-2">
-                Booked on: {formatDate(new Date(booking.booking_date))}
-              </p>
+          <div className="glass-effect card-christmas p-4 mb-4 shadow-xl slide-in" style={{ animationDelay: '0.2s' }}>
+            <div className="flex items-center gap-2 mb-4 pb-3 border-b-2" style={{ borderColor: 'var(--christmas-green)' }}>
+              <ClipboardList className="w-5 h-5 text-green-700" />
+              <h2 className="text-xl font-bold" style={{ color: 'var(--christmas-red)' }}>
+                Booking Details
+              </h2>
             </div>
 
             {/* Guest Details */}
-            <h3 className="font-bold text-xl mb-4">Guests & Meals:</h3>
+            <h3 className="font-bold text-base mb-3">Guests & Meals:</h3>
             <div className="space-y-5">
               {booking.guests && booking.guests.map((guest, idx) => {
                 const orders = guest.orders || [];
@@ -202,12 +257,17 @@ function ConfirmationContent() {
                 const dessertOrder = orders.find(o => o.menu_item.type === 'dessert');
 
                 return (
-                  <div key={guest.id} className="p-6 border-2 border-gray-300 rounded-lg bg-white shadow-md">
-                    <h4 className="font-bold text-xl mb-5 pb-3 border-b border-gray-200" style={{ color: 'var(--christmas-red)' }}>
-                      {idx === 0 ? '🎅 ' : '👤 '}{guest.guest_name}
-                    </h4>
+                  <div key={guest.id} className="p-6 border-2 border-gray-300 rounded-lg bg-white shadow-md hover:shadow-lg transition-shadow">
+                    <div className="flex items-center gap-3 mb-5 pb-3 border-b border-gray-200">
+                      <div className={`p-2 rounded-full ${idx === 0 ? 'bg-gradient-to-br from-red-100 to-red-200' : 'bg-gradient-to-br from-green-100 to-green-200'}`}>
+                        <User className={`w-5 h-5 ${idx === 0 ? 'text-red-700' : 'text-green-700'}`} />
+                      </div>
+                      <h4 className="font-bold text-xl" style={{ color: 'var(--christmas-red)' }}>
+                        {guest.guest_name}
+                      </h4>
+                    </div>
                     {guest.dietary_requirements && (
-                      <p className="text-sm text-gray-600 mb-3">
+                      <p className="text-sm text-gray-600 mb-3 italic">
                         Dietary Requirements: {guest.dietary_requirements}
                       </p>
                     )}
@@ -215,9 +275,12 @@ function ConfirmationContent() {
                       {starterOrder && (
                         <div className="pb-3 border-b border-gray-200">
                           <div className="flex justify-between items-start mb-1">
-                            <span className="font-bold text-sm" style={{ color: 'var(--christmas-green)' }}>🥗 Starter</span>
+                            <div className="flex items-center gap-2">
+                              <Salad className="w-4 h-4 text-green-600" />
+                              <span className="font-bold text-sm" style={{ color: 'var(--christmas-green)' }}>Starter</span>
+                            </div>
                             {starterOrder.menu_item.surcharge > 0 && (
-                              <span className="text-red-600 font-bold text-sm">+{formatCurrency(starterOrder.menu_item.surcharge)}</span>
+                              <span className="badge-surcharge text-xs">+{formatCurrency(starterOrder.menu_item.surcharge)}</span>
                             )}
                           </div>
                           <p className="font-medium">{starterOrder.menu_item.name}</p>
@@ -229,9 +292,12 @@ function ConfirmationContent() {
                       {mainOrder && (
                         <div className="pb-3 border-b border-gray-200">
                           <div className="flex justify-between items-start mb-1">
-                            <span className="font-bold text-sm" style={{ color: 'var(--christmas-green)' }}>🍗 Main</span>
+                            <div className="flex items-center gap-2">
+                              <UtensilsCrossed className="w-4 h-4 text-red-600" />
+                              <span className="font-bold text-sm" style={{ color: 'var(--christmas-green)' }}>Main</span>
+                            </div>
                             {mainOrder.menu_item.surcharge > 0 && (
-                              <span className="text-red-600 font-bold text-sm">+{formatCurrency(mainOrder.menu_item.surcharge)}</span>
+                              <span className="badge-surcharge text-xs">+{formatCurrency(mainOrder.menu_item.surcharge)}</span>
                             )}
                           </div>
                           <p className="font-medium">{mainOrder.menu_item.name}</p>
@@ -243,9 +309,12 @@ function ConfirmationContent() {
                       {dessertOrder && (
                         <div>
                           <div className="flex justify-between items-start mb-1">
-                            <span className="font-bold text-sm" style={{ color: 'var(--christmas-green)' }}>🍰 Dessert</span>
+                            <div className="flex items-center gap-2">
+                              <Cake className="w-4 h-4 text-yellow-600" />
+                              <span className="font-bold text-sm" style={{ color: 'var(--christmas-green)' }}>Dessert</span>
+                            </div>
                             {dessertOrder.menu_item.surcharge > 0 && (
-                              <span className="text-red-600 font-bold text-sm">+{formatCurrency(dessertOrder.menu_item.surcharge)}</span>
+                              <span className="badge-surcharge text-xs">+{formatCurrency(dessertOrder.menu_item.surcharge)}</span>
                             )}
                           </div>
                           <p className="font-medium">{dessertOrder.menu_item.name}</p>
@@ -262,13 +331,13 @@ function ConfirmationContent() {
           </div>
 
           {/* Important Information */}
-          <div className="card-christmas p-6 mb-6" style={{ background: 'linear-gradient(135deg, #FFF9E6 0%, #FFFEF0 100%)' }}>
-            <h3 className="font-bold text-lg mb-3">⚠️ Important Information</h3>
+          <div className="glass-effect card-christmas p-4 mb-4 slide-in" style={{ background: 'linear-gradient(135deg, #FFF9E6 0%, #FFFEF0 100%)', animationDelay: '0.3s' }}>
+            <div className="flex items-center gap-2 mb-3">
+              <AlertCircle className="w-5 h-5 text-yellow-600" />
+              <h3 className="font-bold text-lg">Important Information</h3>
+            </div>
             <ul className="list-disc list-inside space-y-2 text-sm text-gray-700">
               <li>Please complete your payment as soon as possible to secure your booking</li>
-              <li>A confirmation email has been sent to {booking.organizer_email}</li>
-              <li>Please arrive 15 minutes before your scheduled time</li>
-              <li>If you need to make changes, please contact us with your booking reference</li>
               <li>Full payment will be required on the day</li>
             </ul>
           </div>
@@ -277,23 +346,29 @@ function ConfirmationContent() {
           <div className="flex flex-col sm:flex-row gap-4">
             <button
               onClick={() => window.print()}
-              className="flex-1 bg-green-600 text-white py-5 rounded-lg font-bold text-lg shadow-lg hover:bg-green-700 hover:shadow-xl hover:scale-105 transition-all"
+              className="flex-1 bg-green-600 text-white py-5 rounded-lg font-bold text-lg shadow-lg hover:bg-green-700 hover:shadow-xl hover:scale-105 transition-all flex items-center justify-center gap-2"
             >
-              🖨️ Print Confirmation
+              <Printer className="w-5 h-5" />
+              Print Confirmation
             </button>
             <Link
               href="/"
-              className="flex-1 bg-gray-300 text-gray-700 py-5 rounded-lg font-bold text-lg text-center shadow-lg hover:bg-gray-400 hover:shadow-xl hover:scale-105 transition-all"
+              className="flex-1 bg-gray-300 text-gray-700 py-5 rounded-lg font-bold text-lg text-center shadow-lg hover:bg-gray-400 hover:shadow-xl hover:scale-105 transition-all flex items-center justify-center gap-2"
             >
-              🏠 Return Home
+              <Home className="w-5 h-5" />
+              Return Home
             </Link>
           </div>
 
           {/* Thank You Message */}
-          <div className="text-center mt-8">
-            <p className="text-2xl font-bold" style={{ color: 'var(--christmas-red)' }}>
-              🎄 Thank you for your booking! 🎄
-            </p>
+          <div className="text-center mt-8 fade-in">
+            <div className="flex items-center justify-center gap-3">
+              <TreePine className="w-8 h-8 text-green-600" />
+              <p className="text-2xl font-bold" style={{ color: 'var(--christmas-red)' }}>
+                Thank you for your booking!
+              </p>
+              <TreePine className="w-8 h-8 text-green-600" />
+            </div>
             <p className="text-gray-600 mt-2">
               We look forward to serving you this Christmas!
             </p>

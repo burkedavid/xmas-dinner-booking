@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Snowfall from '@/components/Snowfall';
 import { formatCurrency } from '@/lib/utils';
 import type { MenuItem, BookingFormData } from '@/lib/types';
+import { ClipboardList, Coins, CheckCircle, Salad, UtensilsCrossed, Cake, ArrowLeft, AlertCircle, User } from 'lucide-react';
 
 type MenuItems = {
   starter: MenuItem[];
@@ -127,23 +128,29 @@ export default function ReviewPage() {
     <div className="min-h-screen relative">
       <Snowfall />
 
-      <div className="container mx-auto px-4 py-8 relative z-10">
+      <div className="container mx-auto px-4 py-4 relative z-10">
         <div className="max-w-3xl mx-auto">
           {/* Header */}
-          <div className="text-center mb-12">
-            <h1 className="text-5xl md:text-6xl font-bold mb-4" style={{ color: 'var(--christmas-red)' }}>
-              🎄 Review Your Order
-            </h1>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+          <div className="text-center mb-6 fade-in">
+            <div className="flex items-center justify-center gap-2 mb-3">
+              <ClipboardList className="w-6 h-6 text-red-600" />
+              <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-red-600 via-green-600 to-red-600 bg-clip-text text-transparent">
+                Review Your Order
+              </h1>
+            </div>
+            <p className="text-sm md:text-base text-gray-600 max-w-2xl mx-auto">
               Please review your booking details before confirming
             </p>
           </div>
 
           {/* Guest Orders */}
-          <div className="card-christmas p-8 mb-8 shadow-xl">
-            <h2 className="text-3xl font-bold mb-6 pb-4 border-b-2" style={{ color: 'var(--christmas-red)', borderColor: 'var(--christmas-green)' }}>
-              📋 Your Orders
-            </h2>
+          <div className="glass-effect card-christmas p-4 mb-4 shadow-xl slide-in">
+            <div className="flex items-center gap-2 mb-4 pb-3 border-b-2" style={{ borderColor: 'var(--christmas-green)' }}>
+              <ClipboardList className="w-5 h-5 text-red-700" />
+              <h2 className="text-xl font-bold" style={{ color: 'var(--christmas-red)' }}>
+                Your Orders
+              </h2>
+            </div>
             <div className="space-y-5">
               {bookingData.guests.map((guest, idx) => {
                 const starterItem = guest.orders.starter
@@ -157,16 +164,24 @@ export default function ReviewPage() {
                   : null;
 
                 return (
-                  <div key={idx} className="p-6 border-2 border-gray-300 rounded-lg bg-white shadow-md">
-                    <h3 className="font-bold text-xl mb-5 pb-3 border-b border-gray-200" style={{ color: 'var(--christmas-red)' }}>
-                      {idx === 0 ? '🎅 ' : '👤 '}{guest.guest_name}
-                    </h3>
+                  <div key={idx} className="p-6 border-2 border-gray-300 rounded-lg bg-white shadow-md hover:shadow-lg transition-shadow">
+                    <div className="flex items-center gap-3 mb-5 pb-3 border-b border-gray-200">
+                      <div className={`p-2 rounded-full ${idx === 0 ? 'bg-gradient-to-br from-red-100 to-red-200' : 'bg-gradient-to-br from-green-100 to-green-200'}`}>
+                        <User className={`w-5 h-5 ${idx === 0 ? 'text-red-700' : 'text-green-700'}`} />
+                      </div>
+                      <h3 className="font-bold text-xl" style={{ color: 'var(--christmas-red)' }}>
+                        {guest.guest_name}
+                      </h3>
+                    </div>
                     <div className="space-y-3">
                       <div className="pb-3 border-b border-gray-200">
                         <div className="flex justify-between items-start mb-1">
-                          <span className="font-bold text-sm" style={{ color: 'var(--christmas-green)' }}>🥗 Starter</span>
+                          <div className="flex items-center gap-2">
+                            <Salad className="w-4 h-4 text-green-600" />
+                            <span className="font-bold text-sm" style={{ color: 'var(--christmas-green)' }}>Starter</span>
+                          </div>
                           {starterItem && starterItem.surcharge > 0 && (
-                            <span className="text-red-600 font-bold text-sm">+{formatCurrency(starterItem.surcharge)}</span>
+                            <span className="badge-surcharge text-xs">+{formatCurrency(starterItem.surcharge)}</span>
                           )}
                         </div>
                         <p className="font-medium">{starterItem?.name}</p>
@@ -176,9 +191,12 @@ export default function ReviewPage() {
                       </div>
                       <div className="pb-3 border-b border-gray-200">
                         <div className="flex justify-between items-start mb-1">
-                          <span className="font-bold text-sm" style={{ color: 'var(--christmas-green)' }}>🍗 Main</span>
+                          <div className="flex items-center gap-2">
+                            <UtensilsCrossed className="w-4 h-4 text-red-600" />
+                            <span className="font-bold text-sm" style={{ color: 'var(--christmas-green)' }}>Main</span>
+                          </div>
                           {mainItem && mainItem.surcharge > 0 && (
-                            <span className="text-red-600 font-bold text-sm">+{formatCurrency(mainItem.surcharge)}</span>
+                            <span className="badge-surcharge text-xs">+{formatCurrency(mainItem.surcharge)}</span>
                           )}
                         </div>
                         <p className="font-medium">{mainItem?.name}</p>
@@ -188,9 +206,12 @@ export default function ReviewPage() {
                       </div>
                       <div>
                         <div className="flex justify-between items-start mb-1">
-                          <span className="font-bold text-sm" style={{ color: 'var(--christmas-green)' }}>🍰 Dessert</span>
+                          <div className="flex items-center gap-2">
+                            <Cake className="w-4 h-4 text-yellow-600" />
+                            <span className="font-bold text-sm" style={{ color: 'var(--christmas-green)' }}>Dessert</span>
+                          </div>
                           {dessertItem && dessertItem.surcharge > 0 && (
-                            <span className="text-red-600 font-bold text-sm">+{formatCurrency(dessertItem.surcharge)}</span>
+                            <span className="badge-surcharge text-xs">+{formatCurrency(dessertItem.surcharge)}</span>
                           )}
                         </div>
                         <p className="font-medium">{dessertItem?.name}</p>
@@ -206,10 +227,13 @@ export default function ReviewPage() {
           </div>
 
           {/* Total Breakdown */}
-          <div className="card-christmas p-8 mb-8 shadow-xl">
-            <h2 className="text-3xl font-bold mb-6 pb-4 border-b-2" style={{ color: 'var(--christmas-red)', borderColor: 'var(--christmas-green)' }}>
-              💰 Payment Summary
-            </h2>
+          <div className="glass-effect card-christmas p-4 mb-4 shadow-xl slide-in" style={{ animationDelay: '0.1s' }}>
+            <div className="flex items-center gap-2 mb-4 pb-3 border-b-2" style={{ borderColor: 'var(--christmas-green)' }}>
+              <Coins className="w-5 h-5 text-green-700" />
+              <h2 className="text-xl font-bold" style={{ color: 'var(--christmas-red)' }}>
+                Payment Summary
+              </h2>
+            </div>
             <div className="bg-gradient-to-br from-green-50 to-green-100 border-2 border-green-500 rounded-xl p-6 shadow-inner">
               <div className="flex justify-between items-center mb-3">
                 <span className="font-medium text-base">Deposit (£{depositPerPerson} × {bookingData.guests.length} guest{bookingData.guests.length !== 1 ? 's' : ''}):</span>
@@ -244,19 +268,20 @@ export default function ReviewPage() {
                 </span>
               </div>
               <p className="text-xs text-gray-600 mt-3 text-center">
-                3 courses for £37 per person (full amount due on the night)
+                Full amount due on the night
               </p>
             </div>
           </div>
 
           {/* Important Info */}
-          <div className="card-christmas p-6 mb-6" style={{ background: 'linear-gradient(135deg, #FFF9E6 0%, #FFFEF0 100%)' }}>
-            <h3 className="font-bold text-lg mb-3">⚠️ Important Information</h3>
+          <div className="glass-effect card-christmas p-4 mb-4 slide-in" style={{ background: 'linear-gradient(135deg, #FFF9E6 0%, #FFFEF0 100%)', animationDelay: '0.2s' }}>
+            <div className="flex items-center gap-2 mb-3">
+              <AlertCircle className="w-5 h-5 text-yellow-600" />
+              <h3 className="font-bold text-lg">Important Information</h3>
+            </div>
             <ul className="list-disc list-inside space-y-2 text-sm text-gray-700">
               <li>You will be redirected to Monzo to complete your payment</li>
               <li>Your booking is not confirmed until payment is received</li>
-              <li>Full payment of £37 per person will be required on the night</li>
-              <li>You will receive a booking reference after confirming</li>
             </ul>
           </div>
 
@@ -264,16 +289,24 @@ export default function ReviewPage() {
           <div className="flex flex-col sm:flex-row gap-4">
             <button
               onClick={handleGoBack}
-              className="flex-1 bg-gray-300 text-gray-700 py-5 rounded-lg font-bold text-lg hover:bg-gray-400 shadow-lg hover:shadow-xl hover:scale-105 transition-all"
+              className="flex-1 bg-gray-300 text-gray-700 py-5 rounded-lg font-bold text-lg hover:bg-gray-400 shadow-lg hover:shadow-xl hover:scale-105 transition-all flex items-center justify-center gap-2"
             >
-              ← Go Back
+              <ArrowLeft className="w-5 h-5" />
+              Go Back
             </button>
             <button
               onClick={handleConfirmBooking}
               disabled={loading}
-              className="flex-1 btn-christmas py-5 rounded-lg font-bold text-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+              className="flex-1 btn-christmas py-5 rounded-lg font-bold text-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center gap-3"
             >
-              {loading ? 'Processing...' : '✓ Confirm & Pay Deposit'}
+              {loading ? (
+                'Processing...'
+              ) : (
+                <>
+                  <CheckCircle className="w-6 h-6" />
+                  Confirm & Pay Deposit
+                </>
+              )}
             </button>
           </div>
         </div>

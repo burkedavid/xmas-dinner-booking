@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Snowfall from '@/components/Snowfall';
 import { formatCurrency } from '@/lib/utils';
+import { TreePine, ClipboardList, Menu, LogOut, BarChart3, Trash2, CheckCircle, XCircle } from 'lucide-react';
 
 interface Booking {
   id: number;
@@ -129,6 +130,7 @@ export default function AdminBookingsPage() {
         main: main?.menu_item.name || '-',
         dessert: dessert?.menu_item.name || '-',
         deposit: Number(booking.total_amount) / booking.total_guests,
+        totalAmount: Number(booking.total_amount),
         paymentStatus: booking.payment_status,
         isFirstGuest: guestIndex === 0,
         totalGuests: booking.total_guests,
@@ -180,26 +182,32 @@ export default function AdminBookingsPage() {
       <div className="container mx-auto px-4 py-8 relative z-10">
         <div className="max-w-[1800px] mx-auto">
           {/* Header */}
-          <div className="flex justify-between items-center mb-6">
+          <div className="flex justify-between items-center mb-6 fade-in">
             <div>
-              <h1 className="text-4xl font-bold" style={{ color: 'var(--christmas-red)' }}>
-                🎄 Bookings
-              </h1>
-              <p className="text-gray-600 mt-1">
+              <div className="flex items-center gap-2 mb-1">
+                <ClipboardList className="w-6 h-6 text-red-600" />
+                <h1 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-red-600 to-green-600 bg-clip-text text-transparent">
+                  Bookings
+                </h1>
+              </div>
+              <p className="text-sm text-gray-600 flex items-center gap-2">
+                <BarChart3 className="w-4 h-4" />
                 {stats.total} bookings • {stats.paid} paid • {formatCurrency(stats.totalRevenue)} revenue
               </p>
             </div>
-            <div className="flex gap-4">
+            <div className="flex gap-2">
               <a
                 href="/admin/menu"
-                className="bg-green-600 text-white px-4 py-2 rounded-lg font-bold hover:bg-green-700 transition"
+                className="bg-green-600 text-white px-3 py-2 rounded-lg text-sm font-bold hover:bg-green-700 transition hover:scale-105 inline-flex items-center gap-2"
               >
-                📋 Menu
+                <Menu className="w-4 h-4" />
+                Menu
               </a>
               <button
                 onClick={handleLogout}
-                className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg font-bold hover:bg-gray-400 transition"
+                className="bg-gray-300 text-gray-700 px-3 py-2 rounded-lg text-sm font-bold hover:bg-gray-400 transition hover:scale-105 inline-flex items-center gap-2"
               >
+                <LogOut className="w-4 h-4" />
                 Logout
               </button>
             </div>
@@ -207,10 +215,15 @@ export default function AdminBookingsPage() {
 
           {/* Dish Summary */}
           {bookings.length > 0 && (
-            <div className="card-christmas p-6 mb-6">
-              <h2 className="text-2xl font-bold mb-4 pb-3 border-b-2" style={{ color: 'var(--christmas-red)', borderColor: 'var(--christmas-green)' }}>
-                📊 Dish Summary
-              </h2>
+            <div className="glass-effect card-christmas p-6 mb-6 slide-in">
+              <div className="flex items-center gap-3 mb-4 pb-3 border-b-2" style={{ borderColor: 'var(--christmas-green)' }}>
+                <div className="p-2 rounded-lg bg-gradient-to-br from-green-100 to-green-200">
+                  <BarChart3 className="w-6 h-6 text-green-700" />
+                </div>
+                <h2 className="text-2xl font-bold" style={{ color: 'var(--christmas-red)' }}>
+                  Dish Summary
+                </h2>
+              </div>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {/* Starters */}
                 <div>
@@ -274,7 +287,7 @@ export default function AdminBookingsPage() {
               <table className="w-full text-left text-sm">
                 <thead>
                   <tr className="border-b-2 border-gray-300">
-                    <th className="pb-3 pr-4 font-bold">Ref</th>
+                    <th className="pb-3 pr-4 font-bold">Booking</th>
                     <th className="pb-3 pr-4 font-bold">Guest Name</th>
                     <th className="pb-3 pr-4 font-bold">Starter</th>
                     <th className="pb-3 pr-4 font-bold">Main</th>
@@ -289,50 +302,75 @@ export default function AdminBookingsPage() {
                     <tr key={index} className="border-b border-gray-200 hover:bg-gray-50">
                       <td className="py-3 pr-4">
                         {row.isFirstGuest && (
-                          <span className="font-mono text-xs bg-gray-100 px-2 py-1 rounded">
-                            {row.bookingRef}
-                          </span>
+                          <div className="flex flex-col">
+                            <span className="font-mono text-xs bg-gray-100 px-2 py-1 rounded mb-1">
+                              {row.bookingRef}
+                            </span>
+                            {row.totalGuests > 1 && (
+                              <span className="text-xs text-gray-600">
+                                {row.totalGuests} guests
+                              </span>
+                            )}
+                          </div>
                         )}
                       </td>
                       <td className="py-3 pr-4 font-medium">{row.guestName}</td>
                       <td className="py-3 pr-4">{row.starter}</td>
                       <td className="py-3 pr-4">{row.main}</td>
                       <td className="py-3 pr-4">{row.dessert}</td>
-                      <td className="py-3 pr-4 text-right font-bold">{formatCurrency(row.deposit)}</td>
+                      <td className="py-3 pr-4 text-right">
+                        <div className="flex flex-col items-end">
+                          <span className="font-bold">{formatCurrency(row.deposit)}</span>
+                          {row.isFirstGuest && row.totalGuests > 1 && (
+                            <span className="text-xs text-gray-600">
+                              (Total: {formatCurrency(row.totalAmount)})
+                            </span>
+                          )}
+                        </div>
+                      </td>
                       <td className="py-3 pr-4 text-center">
-                        {row.isFirstGuest && (
-                          <span
-                            className={`inline-block px-3 py-1 rounded-full text-xs font-bold ${
+                        <span
+                          className={`inline-block px-3 py-1 rounded-full text-xs font-bold ${
+                            row.paymentStatus === 'paid'
+                              ? 'bg-green-100 text-green-800'
+                              : 'bg-orange-100 text-orange-800'
+                          }`}
+                        >
+                          {row.paymentStatus.toUpperCase()}
+                        </span>
+                      </td>
+                      <td className="py-3">
+                        <div className="flex gap-2 justify-center">
+                          <button
+                            onClick={() => handleTogglePayment(row.bookingId, row.paymentStatus)}
+                            className={`px-3 py-1 rounded text-xs font-bold text-white inline-flex items-center gap-1 transition hover:scale-105 ${
                               row.paymentStatus === 'paid'
-                                ? 'bg-green-100 text-green-800'
-                                : 'bg-orange-100 text-orange-800'
+                                ? 'bg-orange-600 hover:bg-orange-700'
+                                : 'bg-green-600 hover:bg-green-700'
                             }`}
                           >
-                            {row.paymentStatus.toUpperCase()}
-                          </span>
-                        )}
-                      </td>
-                      <td className="py-3 text-center">
-                        {row.isFirstGuest && (
-                          <div className="flex gap-2 justify-center">
-                            <button
-                              onClick={() => handleTogglePayment(row.bookingId, row.paymentStatus)}
-                              className={`px-3 py-1 rounded text-xs font-bold text-white ${
-                                row.paymentStatus === 'paid'
-                                  ? 'bg-orange-600 hover:bg-orange-700'
-                                  : 'bg-green-600 hover:bg-green-700'
-                              }`}
-                            >
-                              {row.paymentStatus === 'paid' ? 'Mark Unpaid' : 'Mark Paid'}
-                            </button>
+                            {row.paymentStatus === 'paid' ? (
+                              <>
+                                <XCircle className="w-3 h-3" />
+                                Unpaid
+                              </>
+                            ) : (
+                              <>
+                                <CheckCircle className="w-3 h-3" />
+                                Paid
+                              </>
+                            )}
+                          </button>
+                          {row.isFirstGuest && (
                             <button
                               onClick={() => handleDeleteBooking(row.bookingId, row.bookingRef)}
-                              className="px-3 py-1 rounded text-xs font-bold bg-red-600 hover:bg-red-700 text-white"
+                              className="px-3 py-1 rounded text-xs font-bold bg-red-600 hover:bg-red-700 text-white inline-flex items-center gap-1 transition hover:scale-105 border-2 border-red-800 shadow-sm hover:shadow-md"
                             >
+                              <Trash2 className="w-3 h-3" />
                               Delete
                             </button>
-                          </div>
-                        )}
+                          )}
+                        </div>
                       </td>
                     </tr>
                   ))}
