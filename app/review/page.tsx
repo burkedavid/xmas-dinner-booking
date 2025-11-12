@@ -88,9 +88,11 @@ export default function ReviewPage() {
     );
   }
 
-  // Calculate totals
-  const depositPerPerson = 10.00;
-  const baseDeposit = bookingData.guests.length * depositPerPerson;
+  // Calculate totals - dynamically based on course selection
+  const baseDeposit = bookingData.guests.reduce((total, guest) => {
+    const guestDeposit = guest.courseOption === '2-course' ? 5.00 : 10.00;
+    return total + guestDeposit;
+  }, 0);
 
   // Collect surcharge items with details
   const surchargeItems: Array<{ name: string; amount: number }> = [];
@@ -164,61 +166,67 @@ export default function ReviewPage() {
                   : null;
 
                 return (
-                  <div key={idx} className="p-6 border-2 border-gray-300 rounded-lg bg-white shadow-md hover:shadow-lg transition-shadow">
-                    <div className="flex items-center gap-3 mb-5 pb-3 border-b border-gray-200">
-                      <div className={`p-2 rounded-full ${idx === 0 ? 'bg-gradient-to-br from-red-100 to-red-200' : 'bg-gradient-to-br from-green-100 to-green-200'}`}>
-                        <User className={`w-5 h-5 ${idx === 0 ? 'text-red-700' : 'text-green-700'}`} />
+                  <div key={idx} className="p-3 border-2 border-gray-300 rounded-lg bg-white shadow-md hover:shadow-lg transition-shadow">
+                    <div className="flex items-center gap-2 mb-2 pb-2 border-b border-gray-200">
+                      <div className={`p-1.5 rounded-full ${idx === 0 ? 'bg-gradient-to-br from-red-100 to-red-200' : 'bg-gradient-to-br from-green-100 to-green-200'}`}>
+                        <User className={`w-4 h-4 ${idx === 0 ? 'text-red-700' : 'text-green-700'}`} />
                       </div>
-                      <h3 className="font-bold text-xl" style={{ color: 'var(--christmas-red)' }}>
+                      <h3 className="font-bold text-base" style={{ color: 'var(--christmas-red)' }}>
                         {guest.guest_name}
                       </h3>
                     </div>
-                    <div className="space-y-3">
-                      <div className="pb-3 border-b border-gray-200">
-                        <div className="flex justify-between items-start mb-1">
-                          <div className="flex items-center gap-2">
-                            <Salad className="w-4 h-4 text-green-600" />
-                            <span className="font-bold text-sm" style={{ color: 'var(--christmas-green)' }}>Starter</span>
+                    <div className="space-y-2">
+                      {starterItem && (
+                        <div className="pb-2 border-b border-gray-200">
+                          <div className="flex justify-between items-start mb-0.5">
+                            <div className="flex items-center gap-1.5">
+                              <Salad className="w-3.5 h-3.5 text-green-600" />
+                              <span className="font-bold text-xs" style={{ color: 'var(--christmas-green)' }}>Starter</span>
+                            </div>
+                            {starterItem.surcharge > 0 && (
+                              <span className="badge-surcharge text-xs">+{formatCurrency(starterItem.surcharge)}</span>
+                            )}
                           </div>
-                          {starterItem && starterItem.surcharge > 0 && (
-                            <span className="badge-surcharge text-xs">+{formatCurrency(starterItem.surcharge)}</span>
+                          <p className="font-medium text-sm leading-tight" style={{ marginBottom: '0' }}>{starterItem.name}</p>
+                          {starterItem.description && (
+                            <p className="text-xs text-gray-600 leading-tight italic" style={{ margin: '0' }}>{starterItem.description}</p>
                           )}
                         </div>
-                        <p className="font-medium">{starterItem?.name}</p>
-                        {starterItem?.description && (
-                          <p className="text-sm text-gray-600 mt-1">{starterItem.description}</p>
-                        )}
-                      </div>
-                      <div className="pb-3 border-b border-gray-200">
-                        <div className="flex justify-between items-start mb-1">
-                          <div className="flex items-center gap-2">
-                            <UtensilsCrossed className="w-4 h-4 text-red-600" />
-                            <span className="font-bold text-sm" style={{ color: 'var(--christmas-green)' }}>Main</span>
+                      )}
+                      {mainItem && (
+                        <div className="pb-2 border-b border-gray-200">
+                          <div className="flex justify-between items-start mb-0.5">
+                            <div className="flex items-center gap-1.5">
+                              <UtensilsCrossed className="w-3.5 h-3.5 text-red-600" />
+                              <span className="font-bold text-xs" style={{ color: 'var(--christmas-green)' }}>Main</span>
+                            </div>
+                            {mainItem.surcharge > 0 && (
+                              <span className="badge-surcharge text-xs">+{formatCurrency(mainItem.surcharge)}</span>
+                            )}
                           </div>
-                          {mainItem && mainItem.surcharge > 0 && (
-                            <span className="badge-surcharge text-xs">+{formatCurrency(mainItem.surcharge)}</span>
+                          <p className="font-medium text-sm leading-tight" style={{ marginBottom: '0' }}>{mainItem.name}</p>
+                          {mainItem.description && (
+                            <p className="text-xs text-gray-600 leading-tight italic" style={{ margin: '0' }}>{mainItem.description}</p>
                           )}
                         </div>
-                        <p className="font-medium">{mainItem?.name}</p>
-                        {mainItem?.description && (
-                          <p className="text-sm text-gray-600 mt-1">{mainItem.description}</p>
-                        )}
-                      </div>
-                      <div>
-                        <div className="flex justify-between items-start mb-1">
-                          <div className="flex items-center gap-2">
-                            <Cake className="w-4 h-4 text-yellow-600" />
-                            <span className="font-bold text-sm" style={{ color: 'var(--christmas-green)' }}>Dessert</span>
+                      )}
+                      {dessertItem && (
+                        <div>
+                          <div className="flex justify-between items-start mb-0.5">
+                            <div className="flex items-center gap-1.5">
+                              <Cake className="w-3.5 h-3.5 text-yellow-600" />
+                              <span className="font-bold text-xs" style={{ color: 'var(--christmas-green)' }}>Dessert</span>
+                            </div>
+                            {dessertItem.surcharge > 0 && (
+                              <span className="badge-surcharge text-xs">+{formatCurrency(dessertItem.surcharge)}</span>
+                            )}
                           </div>
-                          {dessertItem && dessertItem.surcharge > 0 && (
-                            <span className="badge-surcharge text-xs">+{formatCurrency(dessertItem.surcharge)}</span>
+                          <p className="font-medium text-sm leading-tight" style={{ marginBottom: '0' }}>{dessertItem.name}</p>
+                          {dessertItem.description && (
+                            <p className="text-xs text-gray-600 leading-tight italic" style={{ margin: '0' }}>{dessertItem.description}</p>
                           )}
                         </div>
-                        <p className="font-medium">{dessertItem?.name}</p>
-                        {dessertItem?.description && (
-                          <p className="text-sm text-gray-600 mt-1">{dessertItem.description}</p>
-                        )}
-                      </div>
+                      )}
                     </div>
                   </div>
                 );
@@ -235,9 +243,23 @@ export default function ReviewPage() {
               </h2>
             </div>
             <div className="bg-gradient-to-br from-green-50 to-green-100 border-2 border-green-500 rounded-xl p-6 shadow-inner">
-              <div className="flex justify-between items-center mb-3">
-                <span className="font-medium text-base">Deposit (£{depositPerPerson} × {bookingData.guests.length} guest{bookingData.guests.length !== 1 ? 's' : ''}):</span>
-                <span className="font-bold text-lg">{formatCurrency(baseDeposit)}</span>
+              <div className="mb-3">
+                <div className="font-medium text-base mb-2">Deposits:</div>
+                <div className="ml-4 space-y-1">
+                  {bookingData.guests.map((guest, idx) => {
+                    const guestDeposit = guest.courseOption === '2-course' ? 5.00 : 10.00;
+                    return (
+                      <div key={idx} className="flex justify-between items-center text-sm">
+                        <span className="text-gray-700">{guest.guest_name} ({guest.courseOption})</span>
+                        <span className="font-bold">{formatCurrency(guestDeposit)}</span>
+                      </div>
+                    );
+                  })}
+                  <div className="flex justify-between items-center pt-2 border-t border-gray-300">
+                    <span className="font-medium">Total Deposits:</span>
+                    <span className="font-bold text-lg">{formatCurrency(baseDeposit)}</span>
+                  </div>
+                </div>
               </div>
               {surchargeItems.length > 0 && (
                 <div className="mb-3">

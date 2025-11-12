@@ -40,11 +40,28 @@ export async function POST(request: NextRequest) {
         );
       }
 
-      if (!guest.orders.starter || !guest.orders.main || !guest.orders.dessert) {
+      // Validate based on course option
+      if (!guest.orders.main) {
         return NextResponse.json(
-          { error: `${guest.guest_name} must select a starter, main, and dessert` },
+          { error: `${guest.guest_name} must select a main course` },
           { status: 400 }
         );
+      }
+
+      if (guest.courseOption === '3-course') {
+        if (!guest.orders.starter || !guest.orders.dessert) {
+          return NextResponse.json(
+            { error: `${guest.guest_name} must select a starter, main, and dessert for 3-course meal` },
+            { status: 400 }
+          );
+        }
+      } else if (guest.courseOption === '2-course') {
+        if (!guest.orders.starter && !guest.orders.dessert) {
+          return NextResponse.json(
+            { error: `${guest.guest_name} must select either a starter or dessert for 2-course meal` },
+            { status: 400 }
+          );
+        }
       }
     }
 
@@ -52,15 +69,17 @@ export async function POST(request: NextRequest) {
     await client.query('BEGIN');
 
     // Calculate total amount with surcharges
-    const depositPerPerson = 10.00;
-    const baseDeposit = formData.guests.length * depositPerPerson;
+    const baseDeposit = formData.guests.reduce((total, guest) => {
+      const guestDeposit = guest.courseOption === '2-course' ? 5.00 : 10.00;
+      return total + guestDeposit;
+    }, 0);
 
-    // Fetch all menu item IDs to get surcharges
+    // Fetch all menu item IDs to get surcharges (filter out undefined)
     const allMenuItemIds = formData.guests.flatMap(g => [
       g.orders.starter,
       g.orders.main,
       g.orders.dessert
-    ]);
+    ].filter(id => id !== undefined) as number[]);
 
     const menuItemsResult = await client.query(
       'SELECT id, surcharge FROM menu_items WHERE id = ANY($1)',
@@ -74,9 +93,9 @@ export async function POST(request: NextRequest) {
     // Calculate total surcharges
     let totalSurcharges = 0;
     formData.guests.forEach(guest => {
-      totalSurcharges += menuItemsMap.get(guest.orders.starter!) || 0;
-      totalSurcharges += menuItemsMap.get(guest.orders.main!) || 0;
-      totalSurcharges += menuItemsMap.get(guest.orders.dessert!) || 0;
+      if (guest.orders.starter) totalSurcharges += menuItemsMap.get(guest.orders.starter) || 0;
+      if (guest.orders.main) totalSurcharges += menuItemsMap.get(guest.orders.main) || 0;
+      if (guest.orders.dessert) totalSurcharges += menuItemsMap.get(guest.orders.dessert) || 0;
     });
 
     // Calculate total with tip
@@ -124,12 +143,17 @@ export async function POST(request: NextRequest) {
 
       const guestId = guestResult.rows[0].id;
 
-      // Create orders for this guest
-      const orders = [
-        { menu_item_id: guestData.orders.starter, quantity: 1 },
-        { menu_item_id: guestData.orders.main, quantity: 1 },
-        { menu_item_id: guestData.orders.dessert, quantity: 1 },
-      ];
+      // Create orders for this guest (only for selected courses)
+      const orders = [];
+      if (guestData.orders.starter) {
+        orders.push({ menu_item_id: guestData.orders.starter, quantity: 1 });
+      }
+      if (guestData.orders.main) {
+        orders.push({ menu_item_id: guestData.orders.main, quantity: 1 });
+      }
+      if (guestData.orders.dessert) {
+        orders.push({ menu_item_id: guestData.orders.dessert, quantity: 1 });
+      }
 
       for (const order of orders) {
         await client.query(

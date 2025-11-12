@@ -15,6 +15,7 @@ type MenuItems = {
 
 type GuestForm = {
   guest_name: string;
+  courseOption: '2-course' | '3-course';
   orders: {
     starter?: number;
     main?: number;
@@ -27,7 +28,7 @@ export default function BookingPage() {
   const [loading, setLoading] = useState(false);
   const [menuItems, setMenuItems] = useState<MenuItems | null>(null);
   const [guests, setGuests] = useState<GuestForm[]>([
-    { guest_name: '', orders: {} },
+    { guest_name: '', courseOption: '3-course', orders: {} },
   ]);
 
   // Load menu items
@@ -46,9 +47,11 @@ export default function BookingPage() {
   }, []);
 
   // Calculate total deposit: (deposit per person * guests) + surcharges + 10% tip
-  const depositPerPerson = 10.00;
   const calculateTotalDeposit = () => {
-    const baseDepositTotal = guests.length * depositPerPerson;
+    let baseDepositTotal = 0;
+    guests.forEach(guest => {
+      baseDepositTotal += guest.courseOption === '2-course' ? 5.00 : 10.00;
+    });
 
     // Calculate surcharges from selected menu items
     let totalSurcharges = 0;
@@ -75,7 +78,7 @@ export default function BookingPage() {
   const totalDeposit = calculateTotalDeposit();
 
   const addGuest = () => {
-    setGuests([...guests, { guest_name: '', orders: {} }]);
+    setGuests([...guests, { guest_name: '', courseOption: '3-course', orders: {} }]);
   };
 
   const removeGuest = (index: number) => {
@@ -103,9 +106,22 @@ export default function BookingPage() {
         alert(i === 0 ? 'Please enter your name' : `Please enter a name for Guest ${i + 1}`);
         return;
       }
-      if (!guest.orders.starter || !guest.orders.main || !guest.orders.dessert) {
-        alert(`Please select all meals for ${guest.guest_name}`);
-        return;
+      if (guest.courseOption === '2-course') {
+        // 2-course must have main + either starter or dessert
+        if (!guest.orders.main) {
+          alert(`Please select a main course for ${guest.guest_name}`);
+          return;
+        }
+        if (!guest.orders.starter && !guest.orders.dessert) {
+          alert(`Please select either a starter or dessert for ${guest.guest_name}`);
+          return;
+        }
+      } else {
+        // 3-course must have all three
+        if (!guest.orders.starter || !guest.orders.main || !guest.orders.dessert) {
+          alert(`Please select all meals for ${guest.guest_name}`);
+          return;
+        }
       }
     }
 
@@ -118,11 +134,12 @@ export default function BookingPage() {
       organizer_phone: 'N/A',
       guests: guests.map(g => ({
         guest_name: g.guest_name,
+        courseOption: g.courseOption,
         dietary_requirements: '',
         orders: {
-          starter: g.orders.starter!,
-          main: g.orders.main!,
-          dessert: g.orders.dessert!,
+          starter: g.orders.starter,
+          main: g.orders.main,
+          dessert: g.orders.dessert,
         },
       })),
     };
@@ -159,7 +176,7 @@ export default function BookingPage() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 lg:gap-6 mb-4">
           {guests.map((guest, index) => (
             <div key={index} className="glass-effect card-christmas p-3 lg:p-4 shadow-lg slide-in hover:shadow-xl transition-shadow duration-300" style={{ animationDelay: `${index * 0.1}s` }}>
-              <div className="flex justify-between items-center mb-3 pb-2 border-b-2" style={{ borderColor: 'var(--christmas-green)' }}>
+              <div className="flex justify-between items-center mb-3">
                 <h3 className="text-lg lg:text-xl font-bold" style={{ color: 'var(--christmas-red)' }}>
                   {index === 0 ? 'Your Order' : `Guest ${index + 1}`}
                 </h3>
@@ -175,7 +192,7 @@ export default function BookingPage() {
               </div>
 
               {/* Guest Name */}
-              <div style={{ marginBottom: '3rem' }}>
+              <div style={{ marginBottom: '1.5rem' }}>
                 <label className="text-base lg:text-lg font-bold" style={{ color: 'var(--christmas-green)', display: 'block', marginBottom: '0.5rem' }}>
                   {index === 0 ? 'Your Name *' : 'Guest Name *'}
                 </label>
@@ -188,15 +205,56 @@ export default function BookingPage() {
                 />
               </div>
 
+              {/* Course Selection */}
+              <div style={{ marginBottom: '2rem' }}>
+                <label className="text-base lg:text-lg font-bold" style={{ color: 'var(--christmas-green)', display: 'block', marginBottom: '0.5rem' }}>
+                  Choose Your Meal Option * (Click to Select)
+                </label>
+                <div className="flex gap-3">
+                  <button
+                    type="button"
+                    onClick={() => updateGuestField(index, 'courseOption', '3-course')}
+                    className={`flex-1 px-4 py-4 rounded-lg font-semibold text-sm transition-all border-3 cursor-pointer hover:scale-105 active:scale-95 ${
+                      guest.courseOption === '3-course'
+                        ? 'bg-red-600 text-white border-red-700 shadow-lg ring-2 ring-red-400'
+                        : 'bg-white text-gray-700 border-gray-400 hover:border-red-500 hover:shadow-md'
+                    }`}
+                    style={{ borderWidth: '3px' }}
+                  >
+                    <div className="font-bold text-lg">✓ 3 Course</div>
+                    <div className="text-xs mt-1 opacity-90">£10 deposit</div>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => updateGuestField(index, 'courseOption', '2-course')}
+                    className={`flex-1 px-4 py-4 rounded-lg font-semibold text-sm transition-all border-3 cursor-pointer hover:scale-105 active:scale-95 ${
+                      guest.courseOption === '2-course'
+                        ? 'bg-red-600 text-white border-red-700 shadow-lg ring-2 ring-red-400'
+                        : 'bg-white text-gray-700 border-gray-400 hover:border-red-500 hover:shadow-md'
+                    }`}
+                    style={{ borderWidth: '3px' }}
+                  >
+                    <div className="font-bold text-lg">✓ 2 Course</div>
+                    <div className="text-xs mt-1 opacity-90">£5 deposit</div>
+                  </button>
+                </div>
+                {guest.courseOption === '2-course' && (
+                  <p className="text-xs text-gray-600 mt-2 italic">
+                    Choose: Starter + Main OR Main + Dessert
+                  </p>
+                )}
+              </div>
+
               {/* Divider */}
               <div className="border-t-2 border-gray-200" style={{ marginBottom: '2rem' }}></div>
 
               {/* Starter Selection */}
+              {(guest.courseOption === '3-course' || !guest.orders.dessert) && (
               <div className="mt-8 mb-3">
                 <div className="flex items-center gap-2 mb-2">
                   <Salad className="w-4 h-4 text-green-700" />
                   <label className="text-base lg:text-lg font-bold" style={{ color: 'var(--christmas-green)' }}>
-                    Starter *
+                    Starter {guest.courseOption === '3-course' ? '*' : '(Optional)'}
                   </label>
                 </div>
                 <div className="grid grid-cols-1 gap-0.5">
@@ -236,6 +294,7 @@ export default function BookingPage() {
                   ))}
                 </div>
               </div>
+              )}
 
               {/* Main Course Selection */}
               <div style={{ marginTop: '3rem', marginBottom: '1rem' }}>
@@ -332,11 +391,12 @@ export default function BookingPage() {
               </div>
 
               {/* Dessert Selection */}
+              {(guest.courseOption === '3-course' || !guest.orders.starter) && (
               <div style={{ marginTop: '3rem', marginBottom: '1rem' }}>
                 <div className="flex items-center gap-2 mb-2">
                   <Cake className="w-4 h-4 text-yellow-700" />
                   <label className="text-base lg:text-lg font-bold" style={{ color: 'var(--christmas-green)' }}>
-                    Dessert *
+                    Dessert {guest.courseOption === '3-course' ? '*' : '(Optional)'}
                   </label>
                 </div>
                 <div className="grid grid-cols-1 gap-0.5">
@@ -376,6 +436,7 @@ export default function BookingPage() {
                   ))}
                 </div>
               </div>
+              )}
             </div>
           ))}
         </div>
@@ -403,9 +464,16 @@ export default function BookingPage() {
               </h2>
             </div>
             <div className="bg-gradient-to-br from-green-50 to-green-100 border-2 border-green-500 rounded-xl p-6 shadow-inner">
+              {guests.map((guest, idx) => (
+                <div key={idx} className="flex justify-between items-center mb-2">
+                  <span className="font-medium text-sm">{guest.guest_name || `Guest ${idx + 1}`} ({guest.courseOption === '2-course' ? '2-course' : '3-course'}):</span>
+                  <span className="font-bold">{formatCurrency(guest.courseOption === '2-course' ? 5.00 : 10.00)}</span>
+                </div>
+              ))}
+              <div className="border-t border-gray-300 my-3"></div>
               <div className="flex justify-between items-center mb-3">
-                <span className="font-medium text-base">Deposit (£{depositPerPerson} × {guests.length} guest{guests.length !== 1 ? 's' : ''}):</span>
-                <span className="font-bold text-lg">{formatCurrency(guests.length * depositPerPerson)}</span>
+                <span className="font-medium text-base">Total Deposit:</span>
+                <span className="font-bold text-lg">{formatCurrency(guests.reduce((sum, g) => sum + (g.courseOption === '2-course' ? 5 : 10), 0))}</span>
               </div>
               {(() => {
                 let totalSurcharges = 0;
@@ -432,7 +500,7 @@ export default function BookingPage() {
               })()}
               <div className="flex justify-between items-center mb-4">
                 <span className="font-medium text-base">10% tip:</span>
-                <span className="font-bold text-lg">{formatCurrency((guests.length * depositPerPerson + (() => {
+                <span className="font-bold text-lg">{formatCurrency((guests.reduce((sum, g) => sum + (g.courseOption === '2-course' ? 5 : 10), 0) + (() => {
                   let totalSurcharges = 0;
                   guests.forEach(guest => {
                     if (guest.orders.starter && menuItems) {

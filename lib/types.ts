@@ -57,6 +57,7 @@ export interface BookingFormData {
   organizer_phone: string;
   guests: Array<{
     guest_name: string;
+    courseOption: '2-course' | '3-course';
     dietary_requirements?: string;
     orders: {
       starter?: number;
