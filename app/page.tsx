@@ -26,7 +26,7 @@ export default function Home() {
           >
             {/* Compact Title */}
             <h1 className="text-4xl md:text-5xl font-bold mb-3 text-gray-900 drop-shadow-md">
-              Christmas Dinner 2024
+              Christmas Dinner 2025
             </h1>
 
             <p className="text-lg md:text-xl text-gray-800 max-w-2xl mx-auto mb-6">
