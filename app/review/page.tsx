@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import Snowfall from '@/components/Snowfall';
 import { formatCurrency } from '@/lib/utils';
 import type { MenuItem, BookingFormData } from '@/lib/types';
@@ -14,7 +14,6 @@ type MenuItems = {
 
 export default function ReviewPage() {
   const router = useRouter();
-  const searchParams = useSearchParams();
   const [loading, setLoading] = useState(false);
   const [menuItems, setMenuItems] = useState<MenuItems | null>(null);
   const [bookingData, setBookingData] = useState<BookingFormData | null>(null);
