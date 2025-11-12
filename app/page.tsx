@@ -24,7 +24,7 @@ export default function Home() {
             transition={{ duration: 0.8 }}
             className="text-center"
           >
-            <h1 className="text-5xl md:text-6xl font-extrabold mb-4 bg-gradient-to-r from-red-600 via-green-600 to-red-600 bg-clip-text text-transparent">
+            <h1 className="text-5xl md:text-6xl font-extrabold mb-4 text-red-700">
               Christmas Dinner 2025
             </h1>
 
