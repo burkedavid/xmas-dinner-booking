@@ -20,6 +20,7 @@ interface Booking {
       menu_item: {
         name: string;
         type: string;
+        surcharge: number;
       };
     }>;
   }>;
@@ -122,6 +123,15 @@ export default function AdminBookingsPage() {
       const main = guest.orders.find(o => o.menu_item.type === 'main');
       const dessert = guest.orders.find(o => o.menu_item.type === 'dessert');
 
+      // Calculate individual deposit for this guest
+      const baseDeposit = 10.00;
+      const starterSurcharge = Number(starter?.menu_item.surcharge || 0);
+      const mainSurcharge = Number(main?.menu_item.surcharge || 0);
+      const dessertSurcharge = Number(dessert?.menu_item.surcharge || 0);
+      const individualSubtotal = baseDeposit + starterSurcharge + mainSurcharge + dessertSurcharge;
+      const individualTip = individualSubtotal * 0.10;
+      const individualDeposit = individualSubtotal + individualTip;
+
       return {
         bookingId: booking.id,
         bookingRef: booking.booking_reference,
@@ -129,7 +139,7 @@ export default function AdminBookingsPage() {
         starter: starter?.menu_item.name || '-',
         main: main?.menu_item.name || '-',
         dessert: dessert?.menu_item.name || '-',
-        deposit: Number(booking.total_amount) / booking.total_guests,
+        deposit: individualDeposit,
         totalAmount: Number(booking.total_amount),
         paymentStatus: booking.payment_status,
         isFirstGuest: guestIndex === 0,

@@ -2,11 +2,10 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import Image from 'next/image';
 import Snowfall from '@/components/Snowfall';
 import { formatCurrency } from '@/lib/utils';
 import type { MenuItem, BookingFormData } from '@/lib/types';
-import { TreePine, User, Users, Salad, UtensilsCrossed, Cake, UserPlus, ArrowRight, Coins, Sparkles, X } from 'lucide-react';
+import { TreePine, Salad, UtensilsCrossed, Cake, UserPlus, ArrowRight, Coins, Sparkles, X } from 'lucide-react';
 
 type MenuItems = {
   starter: MenuItem[];
@@ -145,48 +144,25 @@ export default function BookingPage() {
     <div className="min-h-screen relative">
       <Snowfall />
 
-      <div className="container mx-auto px-4 py-4 relative z-10 max-w-7xl">
+      <div className="container mx-auto px-3 py-3 relative z-10 max-w-7xl">
         {/* Header */}
-        <div className="text-center mb-6 fade-in">
-          <div className="flex items-center justify-center gap-2 mb-3">
-            <UtensilsCrossed className="w-6 h-6 text-red-600" />
-            <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-red-600 via-green-600 to-red-600 bg-clip-text text-transparent">
-              Book Your Christmas Dinner
-            </h1>
-          </div>
-          <p className="text-sm md:text-base text-gray-600 max-w-2xl mx-auto mb-4">
+        <div className="text-center mb-4 fade-in">
+          <h1 className="text-2xl md:text-4xl font-bold mb-2 bg-gradient-to-r from-red-600 via-green-600 to-red-600 bg-clip-text text-transparent">
+            Book Your Christmas Dinner
+          </h1>
+          <p className="text-sm text-gray-600 max-w-2xl mx-auto">
             Choose your festive feast for yourself and your guests
           </p>
-          {/* Subtle decorative image */}
-          <div className="max-w-md mx-auto">
-            <div className="relative w-full h-32 rounded-lg overflow-hidden shadow-md border border-red-100 opacity-90">
-              <Image
-                src="/photos/b.jpg"
-                alt="Christmas Booking"
-                fill
-                className="object-cover"
-              />
-            </div>
-          </div>
         </div>
 
         {/* Guests Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 lg:gap-6 mb-4">
           {guests.map((guest, index) => (
-            <div key={index} className="glass-effect card-christmas p-4 shadow-lg slide-in hover:shadow-xl transition-shadow duration-300" style={{ animationDelay: `${index * 0.1}s` }}>
-              <div className="flex justify-between items-center mb-4 pb-2 border-b-2" style={{ borderColor: 'var(--christmas-green)' }}>
-                <div className="flex items-center gap-3">
-                  <div className={`p-2 rounded-full ${index === 0 ? 'bg-gradient-to-br from-red-100 to-red-200' : 'bg-gradient-to-br from-green-100 to-green-200'}`}>
-                    {index === 0 ? (
-                      <User className={`w-6 h-6 ${index === 0 ? 'text-red-700' : 'text-green-700'}`} />
-                    ) : (
-                      <Users className="w-6 h-6 text-green-700" />
-                    )}
-                  </div>
-                  <h3 className="text-2xl font-bold" style={{ color: 'var(--christmas-red)' }}>
-                    {index === 0 ? 'Your Order' : `Guest ${index + 1}`}
-                  </h3>
-                </div>
+            <div key={index} className="glass-effect card-christmas p-3 lg:p-4 shadow-lg slide-in hover:shadow-xl transition-shadow duration-300" style={{ animationDelay: `${index * 0.1}s` }}>
+              <div className="flex justify-between items-center mb-3 pb-2 border-b-2" style={{ borderColor: 'var(--christmas-green)' }}>
+                <h3 className="text-lg lg:text-xl font-bold" style={{ color: 'var(--christmas-red)' }}>
+                  {index === 0 ? 'Your Order' : `Guest ${index + 1}`}
+                </h3>
                 {guests.length > 1 && index > 0 && (
                   <button
                     onClick={() => removeGuest(index)}
@@ -199,8 +175,8 @@ export default function BookingPage() {
               </div>
 
               {/* Guest Name */}
-              <div className="mb-4">
-                <label className="label-modern">
+              <div className="mb-3">
+                <label className="label-modern text-sm">
                   {index === 0 ? 'Your Name *' : 'Guest Name *'}
                 </label>
                 <input
@@ -213,16 +189,14 @@ export default function BookingPage() {
               </div>
 
               {/* Starter Selection */}
-              <div className="mb-4">
-                <div className="flex items-center gap-2 mb-4">
-                  <div className="p-2 rounded-lg bg-gradient-to-br from-green-100 to-green-200">
-                    <Salad className="w-5 h-5 text-green-700" />
-                  </div>
-                  <label className="text-lg font-bold" style={{ color: 'var(--christmas-green)' }}>
+              <div className="mb-3">
+                <div className="flex items-center gap-2 mb-2">
+                  <Salad className="w-4 h-4 text-green-700" />
+                  <label className="text-base lg:text-lg font-bold" style={{ color: 'var(--christmas-green)' }}>
                     Starter *
                   </label>
                 </div>
-                <div className="grid grid-cols-1 gap-3">
+                <div className="grid grid-cols-1 gap-2">
                   {menuItems.starter.map((item) => (
                     <div
                       key={item.id}
@@ -231,8 +205,8 @@ export default function BookingPage() {
                     >
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
-                          <div className="flex items-center gap-2 mb-1">
-                            <span className="font-bold text-base">{item.name}</span>
+                          <div className="flex items-center gap-2">
+                            <span className="font-bold text-sm lg:text-base">{item.name}</span>
                             {guest.orders.starter === item.id && (
                               <div className="ml-auto">
                                 <div className="w-5 h-5 rounded-full bg-red-500 flex items-center justify-center">
@@ -244,10 +218,10 @@ export default function BookingPage() {
                             )}
                           </div>
                           {item.description && (
-                            <p className="text-sm text-gray-600 mb-2">{item.description}</p>
+                            <p className="text-xs lg:text-sm text-gray-600 italic leading-snug">{item.description}</p>
                           )}
                           {item.surcharge > 0 && (
-                            <span className="inline-flex items-center gap-1 badge-surcharge text-xs">
+                            <span className="inline-flex items-center gap-1 badge-surcharge text-xs mt-1">
                               <Coins className="w-3 h-3" />
                               +{formatCurrency(item.surcharge)} surcharge
                             </span>
@@ -260,18 +234,16 @@ export default function BookingPage() {
               </div>
 
               {/* Main Course Selection */}
-              <div className="mb-4">
-                <div className="flex items-center gap-2 mb-4">
-                  <div className="p-2 rounded-lg bg-gradient-to-br from-red-100 to-red-200">
-                    <UtensilsCrossed className="w-5 h-5 text-red-700" />
-                  </div>
-                  <label className="text-lg font-bold" style={{ color: 'var(--christmas-green)' }}>
+              <div className="mb-3">
+                <div className="flex items-center gap-2 mb-2">
+                  <UtensilsCrossed className="w-4 h-4 text-red-700" />
+                  <label className="text-base lg:text-lg font-bold" style={{ color: 'var(--christmas-green)' }}>
                     Main Course *
                   </label>
                 </div>
 
                 {/* Regular Main Options */}
-                <div className="grid grid-cols-1 gap-3 mb-4">
+                <div className="grid grid-cols-1 gap-2 mb-3">
                   {menuItems.main.filter(item => item.subcategory === 'regular' || !item.subcategory).map((item) => (
                     <div
                       key={item.id}
@@ -280,8 +252,8 @@ export default function BookingPage() {
                     >
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
-                          <div className="flex items-center gap-2 mb-1">
-                            <span className="font-bold text-base">{item.name}</span>
+                          <div className="flex items-center gap-2">
+                            <span className="font-bold text-sm lg:text-base">{item.name}</span>
                             {guest.orders.main === item.id && (
                               <div className="ml-auto">
                                 <div className="w-5 h-5 rounded-full bg-red-500 flex items-center justify-center">
@@ -293,10 +265,10 @@ export default function BookingPage() {
                             )}
                           </div>
                           {item.description && (
-                            <p className="text-sm text-gray-600 mb-2">{item.description}</p>
+                            <p className="text-xs lg:text-sm text-gray-600 italic leading-snug">{item.description}</p>
                           )}
                           {item.surcharge > 0 && (
-                            <span className="inline-flex items-center gap-1 badge-surcharge text-xs">
+                            <span className="inline-flex items-center gap-1 badge-surcharge text-xs mt-1">
                               <Coins className="w-3 h-3" />
                               +{formatCurrency(item.surcharge)} surcharge
                             </span>
@@ -308,14 +280,14 @@ export default function BookingPage() {
                 </div>
 
                 {/* Steak Options */}
-                <div className="border-t-2 border-gray-200 pt-4 mt-2">
-                  <div className="flex items-center gap-2 mb-3">
+                <div className="border-t-2 border-gray-200 pt-3 mt-2">
+                  <div className="flex items-center gap-2 mb-2">
                     <Sparkles className="w-4 h-4 text-yellow-600" />
                     <p className="text-sm font-bold" style={{ color: 'var(--christmas-green)' }}>
                       OR CHOOSE A PREMIUM STEAK:
                     </p>
                   </div>
-                  <div className="grid grid-cols-1 gap-3">
+                  <div className="grid grid-cols-1 gap-2">
                     {menuItems.main.filter(item => item.subcategory === 'steak').map((item) => (
                       <div
                         key={item.id}
@@ -354,16 +326,14 @@ export default function BookingPage() {
               </div>
 
               {/* Dessert Selection */}
-              <div className="mb-4">
-                <div className="flex items-center gap-2 mb-4">
-                  <div className="p-2 rounded-lg bg-gradient-to-br from-yellow-100 to-yellow-200">
-                    <Cake className="w-5 h-5 text-yellow-700" />
-                  </div>
-                  <label className="text-lg font-bold" style={{ color: 'var(--christmas-green)' }}>
+              <div className="mb-3">
+                <div className="flex items-center gap-2 mb-2">
+                  <Cake className="w-4 h-4 text-yellow-700" />
+                  <label className="text-base lg:text-lg font-bold" style={{ color: 'var(--christmas-green)' }}>
                     Dessert *
                   </label>
                 </div>
-                <div className="grid grid-cols-1 gap-3">
+                <div className="grid grid-cols-1 gap-2">
                   {menuItems.dessert.map((item) => (
                     <div
                       key={item.id}
@@ -372,8 +342,8 @@ export default function BookingPage() {
                     >
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
-                          <div className="flex items-center gap-2 mb-1">
-                            <span className="font-bold text-base">{item.name}</span>
+                          <div className="flex items-center gap-2">
+                            <span className="font-bold text-sm lg:text-base">{item.name}</span>
                             {guest.orders.dessert === item.id && (
                               <div className="ml-auto">
                                 <div className="w-5 h-5 rounded-full bg-red-500 flex items-center justify-center">
@@ -385,10 +355,10 @@ export default function BookingPage() {
                             )}
                           </div>
                           {item.description && (
-                            <p className="text-sm text-gray-600 mb-2">{item.description}</p>
+                            <p className="text-xs lg:text-sm text-gray-600 italic leading-snug">{item.description}</p>
                           )}
                           {item.surcharge > 0 && (
-                            <span className="inline-flex items-center gap-1 badge-surcharge text-xs">
+                            <span className="inline-flex items-center gap-1 badge-surcharge text-xs mt-1">
                               <Coins className="w-3 h-3" />
                               +{formatCurrency(item.surcharge)} surcharge
                             </span>
