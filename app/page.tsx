@@ -29,20 +29,45 @@ export default function Home() {
               Christmas Dinner 2025
             </h1>
 
-            <p className="text-lg md:text-xl text-gray-800 max-w-2xl mx-auto mb-6">
+            <p className="text-lg md:text-xl text-gray-800 max-w-2xl mx-auto mb-8">
               Celebrate the season with a festive three-course meal at{' '}
               <span className="font-semibold text-red-600">Millars Grill & Seafood</span>
             </p>
 
             <Link
               href="/booking"
-              className="inline-flex items-center gap-2 px-10 py-4 bg-gradient-to-r from-red-600 via-green-600 to-red-600 text-white text-lg font-bold rounded-full shadow-xl hover:scale-110 hover:shadow-2xl transition-all duration-300"
+              className="group relative inline-flex items-center justify-center gap-2.5 px-16 py-5 font-semibold transition-all duration-500 ease-out hover:gap-4 no-underline"
+              style={{ 
+                background: 'white',
+                color: '#dc2626',
+                borderRadius: '9999px',
+                boxShadow: '0 4px 20px 0 rgba(0, 0, 0, 0.15)',
+                fontSize: '1.125rem',
+                border: '2px solid #dc2626',
+                transform: 'perspective(1px) translateZ(0)',
+                backfaceVisibility: 'hidden',
+                textDecoration: 'none'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.boxShadow = '0 8px 28px 0 rgba(220, 38, 38, 0.3)';
+                e.currentTarget.style.transform = 'translateY(-2px)';
+                e.currentTarget.style.background = '#dc2626';
+                e.currentTarget.style.color = 'white';
+                e.currentTarget.style.textDecoration = 'none';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.boxShadow = '0 4px 20px 0 rgba(0, 0, 0, 0.15)';
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.background = 'white';
+                e.currentTarget.style.color = '#dc2626';
+                e.currentTarget.style.textDecoration = 'none';
+              }}
             >
-              Book Now
-              <ArrowRight className="w-5 h-5" />
+              <span style={{ marginLeft: '0.5rem' }}>Book Your Table</span>
+              <ArrowRight className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" strokeWidth={2.5} />
             </Link>
 
-            <p className="mt-3 text-sm text-gray-700">
+            <p className="mt-4 text-sm text-gray-700">
               £11 deposit per person • Full payment on the night
             </p>
           </motion.div>
