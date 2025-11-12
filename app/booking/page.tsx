@@ -175,8 +175,8 @@ export default function BookingPage() {
               </div>
 
               {/* Guest Name */}
-              <div className="mb-6">
-                <label className="label-modern text-sm">
+              <div style={{ marginBottom: '3rem' }}>
+                <label className="text-base lg:text-lg font-bold" style={{ color: 'var(--christmas-green)', display: 'block', marginBottom: '0.5rem' }}>
                   {index === 0 ? 'Your Name *' : 'Guest Name *'}
                 </label>
                 <input
@@ -189,26 +189,27 @@ export default function BookingPage() {
               </div>
 
               {/* Divider */}
-              <div className="border-t-2 border-gray-200 mb-4"></div>
+              <div className="border-t-2 border-gray-200" style={{ marginBottom: '2rem' }}></div>
 
               {/* Starter Selection */}
-              <div className="mt-5 mb-3">
+              <div className="mt-8 mb-3">
                 <div className="flex items-center gap-2 mb-2">
                   <Salad className="w-4 h-4 text-green-700" />
                   <label className="text-base lg:text-lg font-bold" style={{ color: 'var(--christmas-green)' }}>
                     Starter *
                   </label>
                 </div>
-                <div className="grid grid-cols-1 gap-1">
+                <div className="grid grid-cols-1 gap-0.5">
                   {menuItems.starter.map((item) => (
                     <div
                       key={item.id}
                       onClick={() => updateGuestField(index, 'orders', { starter: item.id })}
                       className={`menu-card ${guest.orders.starter === item.id ? 'menu-card-selected' : ''}`}
+                      style={{ padding: '0.35rem 0.5rem' }}
                     >
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
-                          <div className="flex items-center gap-2">
+                          <div className="flex items-center gap-2" style={{ marginBottom: '0' }}>
                             <span className="font-bold text-sm lg:text-base">{item.name}</span>
                             {guest.orders.starter === item.id && (
                               <div className="ml-auto">
@@ -221,10 +222,10 @@ export default function BookingPage() {
                             )}
                           </div>
                           {item.description && (
-                            <p className="text-xs lg:text-sm text-gray-600 italic leading-snug">{item.description}</p>
+                            <p className="text-xs lg:text-sm text-gray-600 italic leading-tight" style={{ margin: '0' }}>{item.description}</p>
                           )}
                           {item.surcharge > 0 && (
-                            <span className="inline-flex items-center gap-1 badge-surcharge text-xs mt-1">
+                            <span className="inline-flex items-center gap-1 badge-surcharge text-xs" style={{ marginTop: '0.15rem' }}>
                               <Coins className="w-3 h-3" />
                               +{formatCurrency(item.surcharge)} surcharge
                             </span>
@@ -237,7 +238,7 @@ export default function BookingPage() {
               </div>
 
               {/* Main Course Selection */}
-              <div className="mt-5 mb-3">
+              <div style={{ marginTop: '3rem', marginBottom: '1rem' }}>
                 <div className="flex items-center gap-2 mb-2">
                   <UtensilsCrossed className="w-4 h-4 text-red-700" />
                   <label className="text-base lg:text-lg font-bold" style={{ color: 'var(--christmas-green)' }}>
@@ -246,12 +247,13 @@ export default function BookingPage() {
                 </div>
 
                 {/* Regular Main Options */}
-                <div className="grid grid-cols-1 gap-1 mb-3">
+                <div className="grid grid-cols-1 gap-0.5 mb-3">
                   {menuItems.main.filter(item => item.subcategory === 'regular' || !item.subcategory).map((item) => (
                     <div
                       key={item.id}
                       onClick={() => updateGuestField(index, 'orders', { main: item.id })}
                       className={`menu-card ${guest.orders.main === item.id ? 'menu-card-selected' : ''}`}
+                      style={{ padding: '0.35rem 0.5rem' }}
                     >
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
@@ -268,10 +270,10 @@ export default function BookingPage() {
                             )}
                           </div>
                           {item.description && (
-                            <p className="text-xs lg:text-sm text-gray-600 italic leading-snug">{item.description}</p>
+                            <p className="text-xs lg:text-sm text-gray-600 italic leading-tight" style={{ margin: '0' }}>{item.description}</p>
                           )}
                           {item.surcharge > 0 && (
-                            <span className="inline-flex items-center gap-1 badge-surcharge text-xs mt-1">
+                            <span className="inline-flex items-center gap-1 badge-surcharge text-xs" style={{ marginTop: '0.15rem' }}>
                               <Coins className="w-3 h-3" />
                               +{formatCurrency(item.surcharge)} surcharge
                             </span>
@@ -290,12 +292,13 @@ export default function BookingPage() {
                       OR CHOOSE A PREMIUM STEAK:
                     </p>
                   </div>
-                  <div className="grid grid-cols-1 gap-1">
+                  <div className="grid grid-cols-1 gap-0.5">
                     {menuItems.main.filter(item => item.subcategory === 'steak').map((item) => (
                       <div
                         key={item.id}
                         onClick={() => updateGuestField(index, 'orders', { main: item.id })}
                         className={`menu-card ${guest.orders.main === item.id ? 'menu-card-selected' : ''}`}
+                        style={{ padding: '0.35rem 0.5rem' }}
                       >
                         <div className="flex items-start justify-between">
                           <div className="flex-1">
@@ -312,10 +315,10 @@ export default function BookingPage() {
                               )}
                             </div>
                             {item.description && (
-                              <p className="text-sm text-gray-600 mb-2">{item.description}</p>
+                              <p className="text-sm text-gray-600 leading-tight" style={{ margin: '0' }}>{item.description}</p>
                             )}
                             {item.surcharge > 0 && (
-                              <span className="inline-flex items-center gap-1 badge-surcharge text-xs">
+                              <span className="inline-flex items-center gap-1 badge-surcharge text-xs" style={{ marginTop: '0.15rem' }}>
                                 <Coins className="w-3 h-3" />
                                 +{formatCurrency(item.surcharge)} surcharge
                               </span>
@@ -329,19 +332,20 @@ export default function BookingPage() {
               </div>
 
               {/* Dessert Selection */}
-              <div className="mt-5 mb-3">
+              <div style={{ marginTop: '3rem', marginBottom: '1rem' }}>
                 <div className="flex items-center gap-2 mb-2">
                   <Cake className="w-4 h-4 text-yellow-700" />
                   <label className="text-base lg:text-lg font-bold" style={{ color: 'var(--christmas-green)' }}>
                     Dessert *
                   </label>
                 </div>
-                <div className="grid grid-cols-1 gap-1">
+                <div className="grid grid-cols-1 gap-0.5">
                   {menuItems.dessert.map((item) => (
                     <div
                       key={item.id}
                       onClick={() => updateGuestField(index, 'orders', { dessert: item.id })}
                       className={`menu-card ${guest.orders.dessert === item.id ? 'menu-card-selected' : ''}`}
+                      style={{ padding: '0.35rem 0.5rem' }}
                     >
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
@@ -358,10 +362,10 @@ export default function BookingPage() {
                             )}
                           </div>
                           {item.description && (
-                            <p className="text-xs lg:text-sm text-gray-600 italic leading-snug">{item.description}</p>
+                            <p className="text-xs lg:text-sm text-gray-600 italic leading-tight" style={{ margin: '0' }}>{item.description}</p>
                           )}
                           {item.surcharge > 0 && (
-                            <span className="inline-flex items-center gap-1 badge-surcharge text-xs mt-1">
+                            <span className="inline-flex items-center gap-1 badge-surcharge text-xs" style={{ marginTop: '0.15rem' }}>
                               <Coins className="w-3 h-3" />
                               +{formatCurrency(item.surcharge)} surcharge
                             </span>
