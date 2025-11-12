@@ -184,7 +184,7 @@ export default function AdminMenuPage() {
             <div>
               <div className="flex items-center gap-3 mb-2">
                 <MenuIcon className="w-10 h-10 text-green-600" />
-                <h1 className="text-4xl font-bold bg-gradient-to-r from-red-600 to-green-600 bg-clip-text text-transparent">
+                <h1 className="text-4xl font-bold text-gray-900 drop-shadow-md">
                   Menu Management
                 </h1>
               </div>

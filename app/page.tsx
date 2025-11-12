@@ -24,8 +24,9 @@ export default function Home() {
             transition={{ duration: 0.8 }}
             className="text-center"
           >
-            <h1 className="text-5xl md:text-6xl font-extrabold mb-4 text-red-700">
-              Christmas Dinner 2025
+            {/* Compact Title */}
+            <h1 className="text-4xl md:text-5xl font-bold mb-3 text-gray-900 drop-shadow-md">
+              Christmas Dinner 2024
             </h1>
 
             <p className="text-lg md:text-xl text-gray-800 max-w-2xl mx-auto mb-6">

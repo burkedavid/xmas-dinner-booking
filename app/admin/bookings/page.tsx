@@ -196,7 +196,7 @@ export default function AdminBookingsPage() {
             <div>
               <div className="flex items-center gap-2 mb-1">
                 <ClipboardList className="w-6 h-6 text-red-600" />
-                <h1 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-red-600 to-green-600 bg-clip-text text-transparent">
+                <h1 className="text-2xl md:text-3xl font-bold text-gray-900 drop-shadow-md">
                   Bookings
                 </h1>
               </div>

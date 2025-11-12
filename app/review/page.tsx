@@ -134,7 +134,7 @@ export default function ReviewPage() {
           <div className="text-center mb-6 fade-in">
             <div className="flex items-center justify-center gap-2 mb-3">
               <ClipboardList className="w-6 h-6 text-red-600" />
-              <h1 className="text-3xl md:text-4xl font-bold text-red-700">
+              <h1 className="text-3xl md:text-4xl font-bold text-gray-900 drop-shadow-md">
                 Review Your Order
               </h1>
             </div>

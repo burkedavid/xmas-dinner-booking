@@ -147,7 +147,7 @@ export default function BookingPage() {
       <div className="container mx-auto px-3 py-3 relative z-10 max-w-7xl">
         {/* Header */}
         <div className="text-center mb-4 fade-in">
-          <h1 className="text-2xl md:text-4xl font-bold mb-2 text-red-700">
+          <h1 className="text-2xl md:text-4xl font-bold mb-2 text-gray-900 drop-shadow-md">
             Book Your Christmas Dinner
           </h1>
           <p className="text-sm text-gray-600 max-w-2xl mx-auto">

@@ -58,7 +58,7 @@ export default function AdminLoginPage() {
                 <Lock className="w-12 h-12 text-red-700" />
               </div>
             </div>
-            <h1 className="text-3xl font-bold mb-2 bg-gradient-to-r from-red-600 to-green-600 bg-clip-text text-transparent">
+            <h1 className="text-3xl font-bold mb-2 text-gray-900 drop-shadow-md">
               Admin Login
             </h1>
             <p className="text-gray-600">
