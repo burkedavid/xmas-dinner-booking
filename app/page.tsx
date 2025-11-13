@@ -63,7 +63,7 @@ export default function Home() {
                 e.currentTarget.style.textDecoration = 'none';
               }}
             >
-              <span style={{ marginLeft: '0.5rem' }}>Book Your Table</span>
+              <span style={{ marginLeft: '0.5rem' }}>Book Your Spot</span>
               <ArrowRight className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" strokeWidth={2.5} />
             </Link>
 
