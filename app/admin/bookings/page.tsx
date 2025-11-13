@@ -242,8 +242,8 @@ export default function AdminBookingsPage() {
                   </h3>
                   <div className="space-y-2">
                     {dishesByType.starter.sort((a, b) => b[1].count - a[1].count).map(([dish, info]) => (
-                      <div key={dish} className="flex justify-between items-center p-2 bg-gray-50 rounded">
-                        <span className="text-sm">{dish}</span>
+                      <div key={dish} className="flex items-center gap-2 p-2 bg-gray-50 rounded">
+                        <span className="text-sm flex-1">{dish}</span>
                         <span className="font-bold text-base px-3 py-1 bg-green-100 text-green-800 rounded-full">
                           {info.count}
                         </span>
@@ -259,8 +259,8 @@ export default function AdminBookingsPage() {
                   </h3>
                   <div className="space-y-2">
                     {dishesByType.main.sort((a, b) => b[1].count - a[1].count).map(([dish, info]) => (
-                      <div key={dish} className="flex justify-between items-center p-2 bg-gray-50 rounded">
-                        <span className="text-sm">{dish}</span>
+                      <div key={dish} className="flex items-center gap-2 p-2 bg-gray-50 rounded">
+                        <span className="text-sm flex-1">{dish}</span>
                         <span className="font-bold text-base px-3 py-1 bg-green-100 text-green-800 rounded-full">
                           {info.count}
                         </span>
@@ -276,8 +276,8 @@ export default function AdminBookingsPage() {
                   </h3>
                   <div className="space-y-2">
                     {dishesByType.dessert.sort((a, b) => b[1].count - a[1].count).map(([dish, info]) => (
-                      <div key={dish} className="flex justify-between items-center p-2 bg-gray-50 rounded">
-                        <span className="text-sm">{dish}</span>
+                      <div key={dish} className="flex items-center gap-2 p-2 bg-gray-50 rounded">
+                        <span className="text-sm flex-1">{dish}</span>
                         <span className="font-bold text-base px-3 py-1 bg-green-100 text-green-800 rounded-full">
                           {info.count}
                         </span>
