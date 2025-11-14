@@ -12,6 +12,12 @@ export async function POST(request: NextRequest) {
     }
 
     const adminPassword = process.env.ADMIN_PASSWORD;
+    
+    console.log('Received password length:', password.length);
+    console.log('Received password:', password);
+    console.log('Admin password from env:', adminPassword);
+    console.log('Admin password length:', adminPassword?.length);
+    console.log('Passwords match:', password === adminPassword);
 
     if (password === adminPassword) {
       return NextResponse.json({ success: true });

@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Snowfall from '@/components/Snowfall';
 import { formatCurrency } from '@/lib/utils';
-import { TreePine, ClipboardList, Menu, LogOut, BarChart3, Trash2, CheckCircle, XCircle } from 'lucide-react';
+import { TreePine, ClipboardList, Menu, LogOut, BarChart3, Trash2, CheckCircle, XCircle, Download } from 'lucide-react';
 
 interface Booking {
   id: number;
@@ -114,6 +114,62 @@ export default function AdminBookingsPage() {
   const handleLogout = () => {
     localStorage.removeItem('admin_token');
     router.push('/admin');
+  };
+
+  const exportGuestOrdersToExcel = () => {
+    // Create CSV content
+    const headers = ['Booking Reference', 'Guest Name', 'Starter', 'Main', 'Dessert', 'Deposit', 'Payment Status'];
+    const rows = guestRows.map(row => [
+      row.bookingRef,
+      row.guestName,
+      row.starter,
+      row.main,
+      row.dessert,
+      row.deposit.toFixed(2),
+      row.paymentStatus.toUpperCase()
+    ]);
+
+    const csvContent = [
+      headers.join(','),
+      ...rows.map(row => row.map(cell => `"${cell}"`).join(','))
+    ].join('\n');
+
+    // Create blob and download
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', `guest-orders-${new Date().toISOString().split('T')[0]}.csv`);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const exportDishSummaryToExcel = () => {
+    // Create CSV content
+    const headers = ['Course', 'Dish Name', 'Count'];
+    const rows = [
+      ...dishesByType.starter.sort((a, b) => b[1].count - a[1].count).map(([dish, info]) => ['Starter', dish, info.count]),
+      ...dishesByType.main.sort((a, b) => b[1].count - a[1].count).map(([dish, info]) => ['Main', dish, info.count]),
+      ...dishesByType.dessert.sort((a, b) => b[1].count - a[1].count).map(([dish, info]) => ['Dessert', dish, info.count])
+    ];
+
+    const csvContent = [
+      headers.join(','),
+      ...rows.map(row => row.map(cell => `"${cell}"`).join(','))
+    ].join('\n');
+
+    // Create blob and download
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', `dish-summary-${new Date().toISOString().split('T')[0]}.csv`);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   // Flatten bookings to show each guest as a row
@@ -226,13 +282,22 @@ export default function AdminBookingsPage() {
           {/* Dish Summary */}
           {bookings.length > 0 && (
             <div className="glass-effect card-christmas p-6 mb-6 slide-in">
-              <div className="flex items-center gap-3 mb-4 pb-3 border-b-2" style={{ borderColor: 'var(--christmas-green)' }}>
-                <div className="p-2 rounded-lg bg-gradient-to-br from-green-100 to-green-200">
-                  <BarChart3 className="w-6 h-6 text-green-700" />
+              <div className="flex items-center justify-between mb-4 pb-3 border-b-2" style={{ borderColor: 'var(--christmas-green)' }}>
+                <div className="flex items-center gap-3">
+                  <div className="p-2 rounded-lg bg-gradient-to-br from-green-100 to-green-200">
+                    <BarChart3 className="w-6 h-6 text-green-700" />
+                  </div>
+                  <h2 className="text-2xl font-bold" style={{ color: 'var(--christmas-red)' }}>
+                    Dish Summary
+                  </h2>
                 </div>
-                <h2 className="text-2xl font-bold" style={{ color: 'var(--christmas-red)' }}>
-                  Dish Summary
-                </h2>
+                <button
+                  onClick={exportDishSummaryToExcel}
+                  className="bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-green-700 transition hover:scale-105 inline-flex items-center gap-2"
+                >
+                  <Download className="w-4 h-4" />
+                  Export to Excel
+                </button>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {/* Starters */}
@@ -294,6 +359,22 @@ export default function AdminBookingsPage() {
             {guestRows.length === 0 ? (
               <div className="text-center py-12 text-gray-600">No bookings yet</div>
             ) : (
+              <>
+                <div className="flex justify-between items-center mb-4">
+                  <h2 className="text-xl font-bold" style={{ color: 'var(--christmas-red)' }}>
+                    Guest Orders
+                  </h2>
+                  <button
+                    onClick={exportGuestOrdersToExcel}
+                    className="bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-green-700 transition hover:scale-105 inline-flex items-center gap-2"
+                  >
+                    <Download className="w-4 h-4" />
+                    Export to Excel
+                  </button>
+                </div>
+              </>
+            )}
+            {guestRows.length > 0 && (
               <table className="w-full text-left text-sm">
                 <thead>
                   <tr className="border-b-2 border-gray-300">
